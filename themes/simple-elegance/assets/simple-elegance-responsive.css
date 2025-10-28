@@ -305,6 +305,21 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
 
 /* Phone only (≤640px) - List view with navigation */
 @media (max-width: 640px) {
+    /* Reduce header padding on phones to minimize scrolling */
+    section[style*="padding: 4rem"] {
+        padding: 1.5rem 1rem 1rem !important;
+    }
+
+    /* Reduce navigation section padding */
+    section[style*="padding: 2rem"][style*="background: var(--theme-surface)"] {
+        padding: 1rem !important;
+    }
+
+    /* Reduce calendar section padding */
+    section[style*="padding: 2rem"][style*="background: var(--theme-bg-alt)"] {
+        padding: 1rem !important;
+    }
+
     /* Hide the List/Month toggle buttons on phones */
     #list-view-btn,
     #month-view-btn {
