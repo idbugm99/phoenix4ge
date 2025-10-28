@@ -175,7 +175,10 @@
             
             // Generate calendar grid
             generateCalendarGrid(data.data.calendar);
-            
+
+            // Generate list view with periods data
+            generateListView(data.data.periods, data.data.calendar.monthName, data.data.calendar.year);
+
         } catch (error) {
             console.error('Error loading calendar:', error);
             showErrorState(error.message);
@@ -228,7 +231,86 @@
         
         calendarGrid.innerHTML = gridHtml;
     }
-    
+
+    // Generate list view (copied from Rose theme)
+    function generateListView(periods, monthName, year) {
+        const listView = document.getElementById('list-view');
+        if (!listView) return;
+
+        let listHtml = '';
+
+        // Sort periods by start date
+        if (periods && periods.length > 0) {
+            periods.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+        }
+
+        const eventColors = {
+            'available': 'var(--theme-success)',
+            'travel': 'var(--theme-primary)',
+            'vacation': 'var(--theme-warning)',
+            'unavailable': 'var(--theme-text-subtle)'
+        };
+
+        // Generate list items from periods
+        if (!periods || periods.length === 0) {
+            listHtml = '<div style="text-align: center; padding: 2rem; color: var(--theme-text-subtle);">No events this month</div>';
+        } else {
+            periods.forEach(period => {
+                // Parse start and end dates from API
+                const startDate = new Date(period.start_date);
+                const endDate = new Date(period.end_date);
+
+                let dateStr;
+                // Calculate if single day or range
+                const isSameDay = startDate.toDateString() === endDate.toDateString();
+
+                if (isSameDay) {
+                    // Single day event: "Sep 2"
+                    dateStr = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                } else if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
+                    // Same month range: "Sep 2-8"
+                    const startDay = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const endDay = endDate.getDate();
+                    dateStr = `${startDay}-${endDay}`;
+                } else {
+                    // Cross-month or cross-year range: "Oct 31-Nov 3"
+                    const startDay = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const endDay = endDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    dateStr = `${startDay}-${endDay}`;
+                }
+
+                listHtml += `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--theme-border);">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 0.75rem; height: 0.75rem; border-radius: 50%; margin-right: 0.75rem; background-color: ${eventColors[period.status]};"></div>
+                            <div>
+                                <div style="font-weight: 500; color: var(--theme-text);">${dateStr}</div>
+                                <div style="font-size: 0.875rem; color: var(--theme-text-subtle);">${period.status.charAt(0).toUpperCase() + period.status.slice(1)}</div>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.875rem; font-weight: 500; color: var(--theme-text-subtle);">
+                            ${period.location}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        listView.innerHTML = listHtml;
+    }
+
     // Error state
     function showErrorState(errorMessage = 'Unable to load calendar. Please try again later.') {
         calendarGrid.innerHTML = `
