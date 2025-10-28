@@ -191,9 +191,11 @@ Or manually:
 - **Phone (≤640px)**: Optimized for list-only view
   - Month title visible (e.g., "October 2025")
   - Previous/Next navigation buttons functional (icons only)
-  - List view shows events only
+  - List view shows events with date ranges (e.g., "Sep 2-8", "Oct 31-Nov 3")
+  - Smart date formatting: single day ("Sep 2"), same month ("Sep 2-8"), cross-month ("Oct 31-Nov 3")
   - Calendar grid hidden (not practical on small screens)
   - Toggle buttons hidden (always list view)
+  - Decorative elements hidden for cleaner mobile interface
 - **Tablet/Desktop (>640px)**: Full calendar functionality
   - Calendar grid visible with events
   - List/Month toggle buttons working

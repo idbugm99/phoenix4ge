@@ -332,12 +332,39 @@
             listHtml = '<div class="text-center py-8 theme-text-secondary">No events this month</div>';
         } else {
             events.forEach(event => {
-                const dateStr = event.date.toLocaleDateString('en-US', { 
-                    weekday: 'short', 
-                    month: 'short', 
-                    day: 'numeric' 
-                });
-                
+                // Calculate date range for multi-day events
+                const startDate = event.date;
+                const endDate = new Date(startDate);
+                endDate.setDate(endDate.getDate() + event.duration - 1);
+
+                let dateStr;
+                if (event.duration === 1) {
+                    // Single day event: "Sep 2"
+                    dateStr = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                } else if (startDate.getMonth() === endDate.getMonth()) {
+                    // Same month range: "Sep 2-8"
+                    const startDay = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const endDay = endDate.getDate();
+                    dateStr = `${startDay}-${endDay}`;
+                } else {
+                    // Cross-month range: "Oct 31-Nov 3"
+                    const startDay = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const endDay = endDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    dateStr = `${startDay}-${endDay}`;
+                }
+
                 listHtml += `
                     <div class="flex items-center justify-between py-3 border-b theme-border-light last:border-b-0">
                         <div class="flex items-center">
