@@ -202,6 +202,19 @@ Or manually:
   - Full navigation with text labels
   - All features functional
 
+### Simple Elegance Theme (Theme 22) - Calendar Page Mobile Optimization
+- **Phone (≤640px)**: Optimized for list-only view
+  - Month title visible
+  - Previous/Next navigation buttons functional
+  - List view shows events with date ranges (same as Rose theme)
+  - Calendar grid hidden (not practical on small screens)
+  - Toggle buttons hidden (always list view)
+- **Tablet/Desktop (>640px)**: Full calendar functionality
+  - Calendar grid visible with events
+  - List/Month toggle buttons working
+  - Full navigation with text labels
+  - All features functional
+
 ## Maintenance
 - Update `responsive-universal.css` for global changes
 - Update theme-specific CSS for theme customizations

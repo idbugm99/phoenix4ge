@@ -303,7 +303,41 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
    CALENDAR
    ============================================ */
 
-@media (max-width: 768px) {
+/* Phone only (≤640px) - List view with navigation */
+@media (max-width: 640px) {
+    /* Hide the List/Month toggle buttons on phones */
+    #list-view-btn,
+    #month-view-btn {
+        display: none !important;
+    }
+
+    /* Hide calendar grid on phones - not practical on small screens */
+    #calendar-grid {
+        display: none !important;
+    }
+
+    /* Show list view on phones */
+    #list-container {
+        display: block !important;
+    }
+
+    /* Ensure month title and navigation are visible */
+    #month-title {
+        display: block !important;
+        font-size: 1.5rem !important;
+        text-align: center !important;
+    }
+
+    /* Ensure navigation buttons are touch-friendly */
+    #prev-month,
+    #next-month {
+        min-height: 44px !important;
+        padding: 0.75rem 1rem !important;
+    }
+}
+
+/* Tablet and larger (>640px) - Full calendar functionality */
+@media (min-width: 641px) and (max-width: 768px) {
     .calendar-container, [class*="calendar"] {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
