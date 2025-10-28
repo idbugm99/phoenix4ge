@@ -304,17 +304,15 @@
         
         // Collect all events from calendar data
         calendar.weeks.forEach(week => {
-            if (week.spans) {
-                week.spans.forEach(span => {
-                    const startDate = new Date(calendar.year, calendar.month - 1, span.start_day);
-                    events.push({
-                        date: startDate,
-                        status: span.status,
-                        location: span.location,
-                        duration: span.duration || 1
-                    });
+            week.spans.forEach(span => {
+                const startDate = new Date(calendar.year, calendar.month - 1, span.start_day);
+                events.push({
+                    date: startDate,
+                    status: span.status,
+                    location: span.location,
+                    duration: span.duration || 1
                 });
-            }
+            });
         });
         
         // Sort events by date
