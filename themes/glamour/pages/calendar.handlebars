@@ -284,14 +284,14 @@ class CalendarManager {
     }
     
     renderListView() {
-        if (!this.calendarData?.events) {
-            document.getElementById('list-view-content').innerHTML = 
+        if (!this.calendarData?.periods || this.calendarData.periods.length === 0) {
+            document.getElementById('list-view-content').innerHTML =
                 '<div class="text-center py-8"><p style="color: var(--theme-text-subtle);">No events to display</p></div>';
             return;
         }
-        
+
         let html = '';
-        this.calendarData.events.forEach(event => {
+        this.calendarData.periods.forEach(event => {
             const color = this.getStatusColor(event.status);
             html += `
                 <div class="glamour-card p-4">

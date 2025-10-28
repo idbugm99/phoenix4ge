@@ -201,8 +201,8 @@
                 gridHtml += '</div>';
             });
             
-            // Generate list view
-            generateListView(calendar);
+            // Generate list view with periods data
+            generateListView(data.data.periods, calendar.monthName, calendar.year);
             
             calendarGrid.innerHTML = gridHtml;
             
@@ -219,64 +219,81 @@
         }
     }
     
-    function generateListView(calendar) {
+    function generateListView(periods, monthName, year) {
         const listView = document.getElementById('list-view');
         if (!listView) return;
-        
+
         let listHtml = '';
-        const events = [];
-        
-        // Collect all events from calendar data
-        calendar.weeks.forEach(week => {
-            week.spans.forEach(span => {
-                const startDate = new Date(calendar.year, calendar.month - 1, span.start_day);
-                events.push({
-                    date: startDate,
-                    status: span.status,
-                    location: span.location,
-                    duration: span.duration || 1
-                });
-            });
-        });
-        
-        // Sort events by date
-        events.sort((a, b) => a.date - b.date);
-        
+
+        // Sort periods by start date
+        if (periods && periods.length > 0) {
+            periods.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+        }
+
         const eventColors = {
             'available': '{{theme.colors.success}}',
             'travel': '{{theme.colors.primary}}',
             'vacation': '{{theme.colors.warning}}',
             'unavailable': '{{theme.colors.disabled-text}}'
         };
-        
-        // Generate list items
-        if (events.length === 0) {
+
+        // Generate list items from periods
+        if (!periods || periods.length === 0) {
             listHtml = '<div class="text-center py-8 text-gray-500">No events this month</div>';
         } else {
-            events.forEach(event => {
-                const dateStr = event.date.toLocaleDateString('en-US', { 
-                    weekday: 'short', 
-                    month: 'short', 
-                    day: 'numeric' 
-                });
-                
+            periods.forEach(period => {
+                // Parse start and end dates from API
+                const startDate = new Date(period.start_date);
+                const endDate = new Date(period.end_date);
+
+                let dateStr;
+                // Calculate if single day or range
+                const isSameDay = startDate.toDateString() === endDate.toDateString();
+
+                if (isSameDay) {
+                    // Single day event: "Sep 2"
+                    dateStr = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                } else if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
+                    // Same month range: "Sep 2-8"
+                    const startDay = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const endDay = endDate.getDate();
+                    dateStr = `${startDay}-${endDay}`;
+                } else {
+                    // Cross-month or cross-year range: "Oct 31-Nov 3"
+                    const startDay = startDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const endDay = endDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    dateStr = `${startDay}-${endDay}`;
+                }
+
                 listHtml += `
                     <div class="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0">
                         <div class="flex items-center">
-                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: ${eventColors[event.status]}"></div>
+                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: ${eventColors[period.status]}"></div>
                             <div>
                                 <div class="font-medium text-gray-900">${dateStr}</div>
-                                <div class="text-sm text-gray-600">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</div>
+                                <div class="text-sm text-gray-600">${period.status.charAt(0).toUpperCase() + period.status.slice(1)}</div>
                             </div>
                         </div>
                         <div class="text-sm font-medium text-gray-700">
-                            ${event.location}
+                            ${period.location}
                         </div>
                     </div>
                 `;
             });
         }
-        
+
         listView.innerHTML = listHtml;
     }
     
