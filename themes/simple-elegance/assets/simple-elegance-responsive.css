@@ -311,8 +311,8 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
         display: none !important;
     }
 
-    /* Hide calendar grid on phones - not practical on small screens */
-    #calendar-grid {
+    /* Hide entire calendar container (includes header and grid) on phones */
+    #calendar-container {
         display: none !important;
     }
 
