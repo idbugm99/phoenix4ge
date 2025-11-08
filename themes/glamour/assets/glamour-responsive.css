@@ -318,6 +318,11 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
         min-height: 60px !important;
         padding: 0.25rem !important;
     }
+
+    /* Hide calendar legend on mobile - using class combination */
+    .mt-8.glamour-card.p-6 {
+        display: none !important;
+    }
 }
 
 /* ============================================
@@ -337,6 +342,18 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     .footer-column, footer [class*="col"] {
         width: 100% !important;
         text-align: center !important;
+    }
+
+    /* Hide Quick Links section on mobile - multiple targeting approaches */
+    footer .grid > div:nth-child(3),
+    footer div.hidden,
+    footer [class*="hidden"] {
+        display: none !important;
+    }
+
+    /* Override Tailwind md:block on mobile */
+    footer .md\:block {
+        display: none !important;
     }
 
     .social-icons, [class*="social"] {

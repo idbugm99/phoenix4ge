@@ -19,7 +19,7 @@
             </div>
 
             <!-- Desktop Navigation Links -->
-            <div class="hidden lg:flex items-center space-x-8">
+            <div class="hidden md:flex items-center space-x-8">
                 {{#each navigation}}
                 <a href="{{url}}" class="luxury-nav-link {{#if active}}active{{/if}}">
                     <span class="nav-text">{{name}}</span>
@@ -34,35 +34,21 @@
             </div>
 
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-button" class="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-luxury-light hover:bg-luxury-primary/10 transition-colors duration-300">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+            <button id="mobile-menu-button" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-luxury-light hover:bg-luxury-primary/10 transition-colors duration-300">
+                <i class="fas fa-bars text-xl" style="color: var(--theme-primary);"></i>
             </button>
         </div>
     </div>
 
     <!-- Mobile Navigation Menu -->
-    <div id="mobile-menu" class="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-luxury-light shadow-lg transform -translate-y-full opacity-0 transition-all duration-300 ease-out">
+    <div id="mobile-menu" class="md:hidden hidden absolute top-full left-0 right-0 backdrop-blur-md border-b shadow-lg transition-all duration-300 ease-out" style="background: rgba(255, 255, 255, 0.98); z-index: 999;">
         <div class="container mx-auto px-4 py-6">
             <div class="flex flex-col space-y-4">
                 {{#each navigation}}
                 <a href="{{url}}" class="luxury-mobile-nav-link {{#if active}}active{{/if}}">
-                    <span class="flex items-center space-x-3">
-                        <div class="w-1 h-8 bg-luxury-primary rounded-full opacity-0 transition-opacity duration-200"></div>
-                        <span>{{name}}</span>
-                    </span>
+                    <span>{{name}}</span>
                 </a>
                 {{/each}}
-                
-                <!-- Mobile CTA -->
-                <div class="pt-4 border-t border-luxury-light">
-                    <a href="/{{modelSlug}}/contact{{previewParam}}" class="luxury-btn luxury-btn-primary w-full text-center py-3 text-base font-medium">
-                        Book Now
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -131,18 +117,18 @@
 
 .luxury-mobile-nav-link {
     display: block;
-    padding: 1rem 0;
-    color: var(--theme-text-primary);
+    padding: 1rem 1.5rem;
+    color: var(--theme-text, #2C1810);
     text-decoration: none;
     font-weight: 500;
     font-size: 1.125rem;
-    border-radius: 12px;
+    border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .luxury-mobile-nav-link:hover {
-    color: var(--theme-accent);
-    background: linear-gradient(135deg, var(--theme-primary)/5, var(--theme-accent)/5);
+    color: var(--theme-primary, #D4AF37);
+    background: rgba(212, 175, 55, 0.1);
 }
 
 .luxury-mobile-nav-link:hover .w-1 {
@@ -150,7 +136,9 @@
 }
 
 .luxury-mobile-nav-link.active {
-    color: var(--theme-accent);
+    color: var(--theme-primary, #D4AF37);
+    background: rgba(212, 175, 55, 0.15);
+    font-weight: 600;
 }
 
 .luxury-mobile-nav-link.active .w-1 {
@@ -220,6 +208,43 @@
         transition: none;
     }
 }
+
+/* CRITICAL: Mobile Navigation Responsive Rules */
+@media (max-width: 767px) {
+    /* Force hide desktop navigation on mobile */
+    .luxury-nav div[class*="md:flex"] {
+        display: none !important;
+    }
+
+    /* Force show mobile menu button */
+    .luxury-nav button[class*="md:hidden"],
+    #mobile-menu-button {
+        display: flex !important;
+    }
+
+    /* Allow mobile menu to be shown when not hidden */
+    #mobile-menu:not(.hidden) {
+        display: block !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Force show desktop navigation on desktop */
+    .luxury-nav div[class*="md:flex"] {
+        display: flex !important;
+    }
+
+    /* Force hide mobile menu button */
+    .luxury-nav button[class*="md:hidden"],
+    #mobile-menu-button {
+        display: none !important;
+    }
+
+    /* Force hide mobile menu itself on desktop */
+    #mobile-menu {
+        display: none !important;
+    }
+}
 </style>
 
 <script>
@@ -227,43 +252,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const nav = document.querySelector('.luxury-nav');
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
-    const hamburger = mobileMenuButton.querySelector('.hamburger');
+    const menuIcon = mobileMenuButton.querySelector('i');
 
     // Mobile menu toggle
     mobileMenuButton.addEventListener('click', function() {
-        mobileMenu.classList.toggle('active');
-        hamburger.classList.toggle('active');
+        if (mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.remove('hidden');
+            menuIcon.classList.remove('fa-bars');
+            menuIcon.classList.add('fa-times');
+        } else {
+            mobileMenu.classList.add('hidden');
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
+        }
     });
 
     // Close mobile menu when clicking on links
     const mobileLinks = mobileMenu.querySelectorAll('a');
     mobileLinks.forEach(link => {
         link.addEventListener('click', function() {
-            mobileMenu.classList.remove('active');
-            hamburger.classList.remove('active');
+            mobileMenu.classList.add('hidden');
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
         });
     });
 
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(event) {
-        if (!nav.contains(event.target)) {
-            mobileMenu.classList.remove('active');
-            hamburger.classList.remove('active');
+        if (!nav.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
         }
     });
 
     // Scroll behavior for nav
     let lastScrollY = window.scrollY;
-    
+
     window.addEventListener('scroll', function() {
         const currentScrollY = window.scrollY;
-        
+
         if (currentScrollY > 50) {
             nav.classList.add('scrolled');
         } else {
             nav.classList.remove('scrolled');
         }
-        
+
         lastScrollY = currentScrollY;
     });
 

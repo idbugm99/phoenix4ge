@@ -60,6 +60,18 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
         align-items: center;
         justify-content: center;
     }
+
+    /* Universal: Hide desktop nav on mobile, show mobile button */
+    nav .hidden.md\\:block,
+    nav div[class*="hidden md:block"],
+    nav .md\\:flex {
+        display: none !important;
+    }
+
+    nav .md\\:hidden,
+    nav button[class*="md:hidden"] {
+        display: flex !important;
+    }
 }
 
 /* ============================================
@@ -337,6 +349,11 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     .footer-column, footer [class*="col"] {
         width: 100% !important;
         text-align: center !important;
+    }
+
+    /* Hide Quick Links section on mobile */
+    footer .grid > div:nth-child(3) {
+        display: none !important;
     }
 
     .social-icons, [class*="social"] {

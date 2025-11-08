@@ -1,7 +1,7 @@
 <!-- Luxury Calendar Page - Using Universal Calendar System with Luxury Styling -->
 
 <!-- Luxury Hero Section -->
-<section class="luxury-calendar-hero py-20 relative overflow-hidden" data-aos="fade-in">
+<section class="luxury-calendar-hero relative overflow-hidden" data-aos="fade-in" style="padding: 0.625rem 0;">
     <!-- Luxury Floating Elements -->
     <div class="luxury-hero-floating-elements">
         <div class="luxury-floating-element luxury-element-calendar">📅</div>
@@ -17,17 +17,17 @@
         </div>
         
         <!-- Luxury Page Title -->
-        <h1 class="luxury-hero-title text-4xl md:text-6xl font-bold mb-6" data-aos="fade-up" data-aos-delay="400">
-            {{#if calendar_content.page_title}}{{calendar_content.page_title}}{{else}}Royal Appointment Calendar{{/if}}
+        <h1 class="luxury-hero-title text-4xl md:text-6xl font-bold" data-aos="fade-up" data-aos-delay="400">
+            {{#if calendar_content.page_title}}{{calendar_content.page_title}}{{else}}Calendar{{/if}}
         </h1>
-        
+
         <!-- Luxury Page Subtitle -->
         {{#if calendar_content.page_subtitle}}
-        <p class="luxury-hero-subtitle text-xl max-w-3xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="600">
+        <p class="luxury-hero-subtitle text-xl max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="600">
             {{calendar_content.page_subtitle}}
         </p>
         {{else}}
-        <p class="luxury-hero-subtitle text-xl max-w-3xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="600">
+        <p class="luxury-hero-subtitle text-xl max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="600">
             View my current location and availability. Check where I am traveling and when I am available for exclusive appointments.
         </p>
         {{/if}}
@@ -44,7 +44,7 @@
 </section>
 
 <!-- Main Calendar Section -->
-<section class="py-16 luxury-calendar-section">
+<section class="luxury-calendar-section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- View Toggle (Mobile First) -->
@@ -60,21 +60,19 @@
         </div>
         
         <!-- Calendar Navigation -->
-        {{#if calendar_content.calendar_navigation_visible}}
         <div class="flex justify-between items-center mb-8" data-aos="fade-up">
             <button id="prev-month" class="luxury-nav-btn">
                 <i class="fas fa-chevron-left mr-2"></i>
                 <span>Previous</span>
             </button>
-            
+
             <h2 id="month-title" class="luxury-month-title text-3xl font-bold text-center"></h2>
-            
+
             <button id="next-month" class="luxury-nav-btn">
                 <span>Next</span>
                 <i class="fas fa-chevron-right ml-2"></i>
             </button>
         </div>
-        {{/if}}
 
         <!-- Calendar Container -->
         <div id="calendar-container" class="luxury-calendar-container rounded-lg shadow-lg overflow-hidden mb-8">
@@ -180,9 +178,10 @@
             currentYear = year;
             currentMonth = month;
             
-            // Update month title
+            // Update month title with short month format for mobile
             if (monthTitle) {
-                monthTitle.textContent = `${calendar.monthName} ${calendar.year}`;
+                const shortMonth = calendar.monthName.substring(0, 3);
+                monthTitle.textContent = `${shortMonth} ${calendar.year}`;
             }
             
             // Generate calendar grid
@@ -457,10 +456,38 @@
 .luxury-calendar-hero {
     background: linear-gradient(135deg, #2C1810 0%, #8B4513 25%, #D4AF37 50%, #B8860B 75%, #8B4513 100%);
     position: relative;
-    min-height: 40vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0.625rem 0;
+}
+
+/* Tablet and desktop - normal hero size */
+@media (min-width: 769px) {
+    .luxury-calendar-hero {
+        min-height: 30vh;
+        padding: 3rem 0;
+    }
+}
+
+/* Add spacing between elements */
+.luxury-hero-title {
+    margin-bottom: 0;
+}
+
+.luxury-hero-subtitle {
+    margin-bottom: 1.5rem;
+}
+
+/* Luxury Calendar Section */
+.luxury-calendar-section {
+    padding: 0.5rem 0;
+}
+
+@media (min-width: 769px) {
+    .luxury-calendar-section {
+        padding: 4rem 0;
+    }
 }
 
 .luxury-hero-floating-elements {
@@ -861,91 +888,6 @@
     font-family: Georgia, serif;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .luxury-calendar-hero {
-        min-height: 35vh;
-        padding: 4rem 0 3rem;
-    }
-    
-    .luxury-hero-title {
-        font-size: 3.5rem;
-        letter-spacing: 2px;
-    }
-    
-    .luxury-hero-subtitle {
-        font-size: 1.2rem;
-        padding: 0 1rem;
-    }
-    
-    .luxury-floating-element {
-        font-size: 2rem;
-    }
-    
-    .luxury-element-calendar {
-        font-size: 2.5rem;
-    }
-    
-    .luxury-month-title {
-        font-size: 2rem;
-    }
-    
-    .luxury-nav-btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-    }
-    
-    .luxury-cta-title {
-        font-size: 2rem;
-    }
-    
-    .luxury-cta-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .luxury-btn {
-        width: 100%;
-        max-width: 280px;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .luxury-calendar-hero {
-        min-height: 30vh;
-        padding: 3rem 0 2rem;
-    }
-    
-    .luxury-hero-title {
-        font-size: 2.8rem;
-        letter-spacing: 1px;
-    }
-    
-    .luxury-hero-subtitle {
-        font-size: 1.1rem;
-        padding: 0 1.5rem;
-    }
-    
-    .luxury-floating-element {
-        font-size: 1.8rem;
-    }
-    
-    .luxury-element-calendar {
-        font-size: 2.2rem;
-    }
-    
-    .luxury-divider-line-left,
-    .luxury-divider-line-right {
-        width: 80px;
-    }
-    
-    .luxury-calendar-cta {
-        padding: 3rem 1.5rem;
-        margin: 0 1rem;
-    }
-}
-
 /* Calendar view toggle styles */
 #list-view-btn.active,
 #month-view-btn.active {
@@ -964,22 +906,6 @@
     opacity: 0.8;
 }
 
-/* Responsive behavior */
-@media (min-width: 641px) {
-    #list-container {
-        display: none !important;
-    }
-}
-
-@media (max-width: 640px) {
-    #calendar-container {
-        display: none !important;
-    }
-    #list-container {
-        display: block !important;
-    }
-}
-
 /* Loading animation */
 @keyframes spin {
     from { transform: rotate(0deg); }
@@ -990,23 +916,32 @@
     animation: spin 1s linear infinite;
 }
 
-/* Calendar responsiveness */
+/* Tablet and desktop CTA buttons */
+@media (min-width: 769px) {
+    .luxury-cta-buttons {
+        flex-direction: row;
+    }
+}
+
 @media (max-width: 768px) {
-    .grid.grid-cols-7 {
-        font-size: 0.875rem;
+    .luxury-cta-title {
+        font-size: 2rem;
     }
-    
-    #month-title {
-        font-size: 1.5rem;
+
+    .luxury-cta-buttons {
+        flex-direction: column;
+        align-items: center;
     }
-    
-    #prev-month, #next-month {
-        padding: 0.75rem 1rem;
-        font-size: 0.875rem;
+
+    .luxury-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
     }
-    
-    #prev-month span, #next-month span {
-        display: none;
+
+    .luxury-calendar-cta {
+        padding: 3rem 1.5rem;
+        margin: 0 1rem;
     }
 }
 </style>

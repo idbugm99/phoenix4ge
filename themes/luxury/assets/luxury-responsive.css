@@ -62,13 +62,180 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     }
 }
 
+/* Luxury Theme Navigation Mobile */
+@media (max-width: 767px) {
+    /* Force hide desktop navigation on mobile - target any element with md:flex */
+    .luxury-nav .md\\:flex,
+    .luxury-nav div[class*="md:flex"] {
+        display: none !important;
+    }
+
+    /* Force show mobile menu button */
+    .luxury-nav .md\\:hidden,
+    .luxury-nav button[class*="md:hidden"],
+    #mobile-menu-button {
+        display: flex !important;
+    }
+
+    /* Hide rates page section navigation on mobile - let users scroll */
+    .luxury-section-navigation {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Force show desktop navigation on tablet/desktop */
+    .luxury-nav .md\\:flex,
+    .luxury-nav div[class*="md:flex"] {
+        display: flex !important;
+    }
+
+    /* Force hide mobile menu button */
+    .luxury-nav .md\\:hidden,
+    .luxury-nav button[class*="md:hidden"],
+    #mobile-menu-button {
+        display: none !important;
+    }
+
+    /* Force hide mobile menu itself */
+    #mobile-menu,
+    .luxury-nav div[class*="md:hidden"][id="mobile-menu"] {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   CALENDAR - LUXURY THEME
+   ============================================ */
+
+/* Phone only (≤640px) - List view specific styles */
+@media (max-width: 640px) {
+    /* Keep hero but make it MUCH more compact - 50% reduction */
+    .luxury-calendar-hero {
+        min-height: auto !important;
+        padding: 0.625rem 1rem !important;
+    }
+
+    /* Hide decorative elements on phones */
+    .luxury-hero-floating-elements {
+        display: none !important;
+    }
+
+    /* Hide calendar icon */
+    .luxury-calendar-hero .text-6xl,
+    .luxury-calendar-hero .text-6xl.mb-8 {
+        display: none !important;
+    }
+
+    /* Show title, make it compact */
+    .luxury-hero-title {
+        font-size: 1.5rem !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
+
+    /* Show subtitle on phones */
+    .luxury-hero-subtitle {
+        font-size: 0.875rem !important;
+        margin-top: 0.5rem !important;
+    }
+
+    /* Hide crown divider on phones */
+    .luxury-hero-divider {
+        display: none !important;
+    }
+
+    /* Reduce section padding by 50% */
+    .luxury-calendar-section {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    /* Reduce inner container padding */
+    .luxury-calendar-hero .max-w-6xl {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* Calendar navigation - keep side by side, make compact */
+    .flex.justify-between.items-center.mb-8 {
+        margin-bottom: 1.5rem !important;
+        gap: 0.5rem !important;
+        flex-wrap: nowrap !important;
+    }
+
+    /* Navigation buttons - compact sizing */
+    .luxury-nav-btn {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem !important;
+        min-height: 44px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Hide button icons on phones */
+    .luxury-nav-btn i {
+        display: none !important;
+    }
+
+    /* Month title - reduced size with short format */
+    .luxury-month-title {
+        font-size: 1.125rem !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        flex: 1 !important;
+    }
+
+    /* Hide calendar grid completely on phones */
+    #calendar-container {
+        display: none !important;
+    }
+
+    /* Force list view to show on phones */
+    #list-container {
+        display: block !important;
+    }
+
+    /* Hide toggle buttons on phones */
+    .flex.justify-center.mb-6.md\\:hidden {
+        display: none !important;
+    }
+
+    /* List view styling for phones */
+    .luxury-list-date {
+        min-width: 80px;
+        font-size: 14px;
+    }
+
+    .luxury-list-status {
+        margin-left: 1rem;
+    }
+
+    .luxury-list-location {
+        font-size: 14px;
+    }
+}
+
+/* Tablet (641px-768px) - Show toggle buttons */
+@media (min-width: 641px) and (max-width: 768px) {
+    /* Reduce hero but not as dramatically */
+    .luxury-calendar-hero {
+        min-height: 30vh !important;
+    }
+
+    /* Keep toggle buttons visible on tablets */
+    .flex.justify-center.mb-6.md\\:hidden {
+        display: flex !important;
+    }
+}
+
 /* ============================================
    HERO SECTIONS
    ============================================ */
 
 @media (max-width: 768px) {
     .hero, .hero-section, [class*="hero"] {
-        min-height: 60vh !important;
+        min-height: auto !important;
         padding: 2rem 1rem !important;
     }
 

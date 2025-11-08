@@ -209,6 +209,38 @@ Or manually:
   - List view shows events with date ranges (same as Rose theme)
   - Calendar grid hidden (not practical on small screens)
   - Toggle buttons hidden (always list view)
+  - Reduced section padding for minimal scrolling
+- **Tablet/Desktop (>640px)**: Full calendar functionality
+  - Calendar grid visible with events
+  - List/Month toggle buttons working
+  - Full navigation with text labels
+  - All features functional
+
+### Royal Gem Theme (Theme 19) - Calendar Page Mobile Optimization
+- **Phone (≤640px)**: Optimized for list-only view
+  - Month title visible
+  - Previous/Next navigation buttons functional
+  - List view shows events with date ranges (same as Rose theme)
+  - Calendar grid hidden (not practical on small screens)
+  - Toggle buttons hidden (always list view)
+  - Reduced section padding (4rem→1.5rem header, 2rem→1rem sections)
+- **Tablet/Desktop (>640px)**: Full calendar functionality
+  - Calendar grid visible with events
+  - List/Month toggle buttons working
+  - Full navigation with text labels
+  - All features functional
+
+### BDSM Theme (Theme 18) - Calendar Page Mobile Optimization
+- **Phone (≤640px)**: Optimized for list-only view
+  - Month title visible
+  - Previous/Next navigation buttons functional
+  - List view shows events with date ranges (same as Rose theme)
+  - Calendar grid hidden (not practical on small screens)
+  - Toggle buttons hidden (always list view)
+  - Reduced hero height (24rem→16rem) and padding (2rem)
+  - Hidden decorative chain dividers
+  - Reduced main section padding (4rem→2rem)
+  - Navigation conditional removed to ensure visibility
 - **Tablet/Desktop (>640px)**: Full calendar functionality
   - Calendar grid visible with events
   - List/Month toggle buttons working

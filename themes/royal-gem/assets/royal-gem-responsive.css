@@ -322,7 +322,61 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
    CALENDAR
    ============================================ */
 
-@media (max-width: 768px) {
+/* Phone only (≤640px) - List view with navigation */
+@media (max-width: 640px) {
+    /* Reduce hero section padding dramatically on phones */
+    .royal-section .royal-container {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    /* Reduce hero header margin */
+    .royal-section .royal-container > div[style*="margin-bottom: 4rem"] {
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Hide decorative royal icon in hero */
+    .royal-section .royal-container > div > div[style*="margin-bottom: 2rem"] {
+        display: none !important;
+    }
+
+    /* Reduce calendar content section padding */
+    section[style*="padding: 5rem 0"] {
+        padding: 2rem 0 !important;
+    }
+
+    /* Hide the entire toggle button container on phones */
+    .royal-view-toggle {
+        display: none !important;
+    }
+
+    /* Hide entire calendar container (includes header and grid) on phones */
+    #royal-calendar-container {
+        display: none !important;
+    }
+
+    /* Show list view on phones */
+    #royal-list-container {
+        display: block !important;
+    }
+
+    /* Ensure month title is visible */
+    #royal-month-title {
+        display: block !important;
+        font-size: 1.5rem !important;
+        text-align: center !important;
+    }
+
+    /* Ensure navigation buttons are touch-friendly */
+    #royal-prev-month,
+    #royal-next-month {
+        min-height: 44px !important;
+        padding: 0.75rem 1rem !important;
+    }
+}
+
+/* Tablet and larger (>640px) - Full calendar functionality */
+@media (min-width: 641px) and (max-width: 768px) {
     .calendar-container, [class*="calendar"] {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -523,6 +577,12 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
    ============================================ */
 
 @media (max-width: 768px) {
+    /* Hide rates page sticky navigation on mobile - let users scroll */
+    #royal-sticky-nav {
+        display: none !important;
+    }
+
+
     /* Fix hero button container */
     .royal-section div[style*="display: flex"][style*="gap: 2rem"] {
         flex-direction: column !important;

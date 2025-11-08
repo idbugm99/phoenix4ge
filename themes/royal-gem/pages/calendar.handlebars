@@ -438,30 +438,52 @@
 }
 
 /* Royal calendar responsive design */
-@media (max-width: 768px) {
+/* Phone only (≤640px) - List view, NO toggle buttons */
+@media (max-width: 640px) {
     #royal-calendar-container {
         display: none !important;
     }
-    
+
     #royal-list-container {
         display: block !important;
     }
-    
+
     .royal-view-toggle {
-        display: flex !important;
+        display: none !important;
     }
-    
+
     .royal-container > div[style*="flex"] {
         flex-direction: column !important;
         gap: 1rem !important;
     }
 }
 
+/* Tablet (641px-768px) - List view WITH toggle buttons */
+@media (min-width: 641px) and (max-width: 768px) {
+    #royal-calendar-container {
+        display: none !important;
+    }
+
+    #royal-list-container {
+        display: block !important;
+    }
+
+    .royal-view-toggle {
+        display: flex !important;
+    }
+
+    .royal-container > div[style*="flex"] {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+}
+
+/* Desktop (>768px) - Month view, NO toggle buttons */
 @media (min-width: 769px) {
     #royal-list-container {
         display: none !important;
     }
-    
+
     .royal-view-toggle {
         display: none !important;
     }

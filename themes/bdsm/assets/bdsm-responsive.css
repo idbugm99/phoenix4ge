@@ -60,6 +60,26 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
         align-items: center;
         justify-content: center;
     }
+
+    /* BDSM Theme: Force hide desktop nav on mobile, show mobile button */
+    .luxury-nav .hidden,
+    .luxury-nav .md\\:block,
+    .luxury-nav div[class*="hidden"],
+    nav.luxury-nav > div > div > div:first-of-type,
+    nav .hidden.md\\:block,
+    nav div.hidden,
+    nav div[class*="hidden md:block"] {
+        display: none !important;
+    }
+
+    .luxury-nav .md\\:hidden,
+    .luxury-nav button,
+    .luxury-nav div[class*="md:hidden"],
+    nav .md\\:hidden,
+    nav button[class*="md:hidden"],
+    nav div.md\\:hidden {
+        display: block !important;
+    }
 }
 
 /* ============================================

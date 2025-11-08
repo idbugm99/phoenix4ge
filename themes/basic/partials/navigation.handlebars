@@ -10,33 +10,32 @@
             </div>
             
             <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-1">
+            <div class="desktop-menu" style="display: none; align-items: center; gap: 0.25rem;">
                 {{#each navigation}}
-                <a href="{{this.url}}" 
+                <a href="{{this.url}}"
                    class="basic-nav-link rounded {{#if this.active}}active{{/if}}">
                     {{this.name}}
                 </a>
                 {{/each}}
             </div>
-            
+
             <!-- Mobile Menu Button -->
-            <div class="md:hidden">
-                <button type="button" 
-                        class="text-white hover:text-gray-200 focus:outline-none transition-colors"
-                        onclick="toggleMobileMenu()">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
+            <button type="button"
+                    id="mobile-menu-button"
+                    class="mobile-menu-btn"
+                    style="display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;"
+                    aria-controls="mobile-menu"
+                    aria-label="Toggle menu">
+                <i id="mobile-menu-icon" class="fas fa-bars"></i>
+            </button>
         </div>
     </div>
-    
+
     <!-- Mobile Menu -->
-    <div id="mobileMenu" class="md:hidden hidden bg-black bg-opacity-20">
+    <div id="mobile-menu" class="bg-black bg-opacity-20" style="display: none;">
         <div class="px-2 pt-2 pb-3 space-y-1">
             {{#each navigation}}
-            <a href="{{this.url}}" 
+            <a href="{{this.url}}"
                class="block px-3 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded transition-colors {{#if this.active}}bg-white bg-opacity-20{{/if}}">
                 {{this.name}}
             </a>
@@ -45,23 +44,71 @@
     </div>
 </nav>
 
-<script>
-function toggleMobileMenu() {
-    const menu = document.getElementById('mobileMenu');
-    if (menu.classList.contains('hidden')) {
-        menu.classList.remove('hidden');
-    } else {
-        menu.classList.add('hidden');
+<style>
+/* Mobile menu animations */
+#mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+#mobile-menu.show {
+    max-height: 500px;
+}
+
+/* Show mobile menu when toggled with "show" class */
+@media (max-width: 767px) {
+    #mobile-menu.show {
+        display: block !important;
+        max-height: 500px !important;
     }
 }
 
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(event) {
-    const menu = document.getElementById('mobileMenu');
-    const button = event.target.closest('button');
-    
-    if (!menu.contains(event.target) && !button) {
-        menu.classList.add('hidden');
+@media (min-width: 768px) {
+    #mobile-menu {
+        display: none !important;
     }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const desktopMenu = document.querySelector('.desktop-menu');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    // Show mobile menu button on small screens
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            mobileMenuBtn.style.display = 'block';
+            desktopMenu.style.display = 'none';
+            mobileMenu.style.display = 'none';
+            mobileMenu.classList.remove('show');
+            icon.className = 'fas fa-bars';
+        } else {
+            mobileMenuBtn.style.display = 'none';
+            desktopMenu.style.display = 'flex';
+            mobileMenu.style.display = 'none';
+            mobileMenu.classList.remove('show');
+        }
+    }
+
+    // Toggle mobile menu
+    mobileMenuBtn?.addEventListener('click', function() {
+        if (mobileMenu.classList.contains('show')) {
+            mobileMenu.classList.remove('show');
+            mobileMenu.style.display = 'none';
+            icon.className = 'fas fa-bars';
+        } else {
+            mobileMenu.classList.add('show');
+            mobileMenu.style.display = 'block';
+            icon.className = 'fas fa-times';
+        }
+    });
+
+    // Handle resize
+    window.addEventListener('resize', handleResize);
+    handleResize();
 });
 </script>

@@ -57,22 +57,13 @@
         <div class="px-4 pt-4 pb-6 space-y-3 border-t"
              style="background: var(--theme-surface); border-color: var(--theme-border);">
             {{#each navigation}}
-            <a href="{{this.url}}" 
+            <a href="{{this.url}}"
                class="block px-4 py-3 rounded-lg text-base font-medium transition-colors duration-300 {{#if this.active}}mobile-nav-active{{/if}}"
                style="color: var(--theme-text);"
                role="menuitem">
                 {{this.name}}
             </a>
             {{/each}}
-            
-            <!-- Mobile CTA -->
-            <div class="pt-4">
-                <a href="/{{modelSlug}}/calendar{{previewParam}}" 
-                   class="glamour-btn w-full justify-center">
-                    <i class="fas fa-calendar-alt"></i>
-                    Book Now
-                </a>
-            </div>
         </div>
     </div>
 </nav>
@@ -106,6 +97,42 @@
 
 #mobile-menu.show {
     max-height: 500px;
+}
+
+/* CRITICAL: Mobile Navigation Responsive Rules */
+@media (max-width: 767px) {
+    /* Force hide desktop navigation on mobile */
+    .glamour-nav div[class*="md:block"] {
+        display: none !important;
+    }
+
+    /* Force show mobile menu button */
+    .glamour-nav div[class*="md:hidden"] {
+        display: block !important;
+    }
+
+    /* Show mobile menu when toggled with "show" class */
+    #mobile-menu.show {
+        display: block !important;
+        max-height: 500px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Force show desktop navigation on desktop */
+    .glamour-nav div[class*="md:block"] {
+        display: block !important;
+    }
+
+    /* Force hide mobile menu button */
+    .glamour-nav div[class*="md:hidden"] {
+        display: none !important;
+    }
+
+    /* Force hide mobile menu itself on desktop */
+    #mobile-menu {
+        display: none !important;
+    }
 }
 </style>
 

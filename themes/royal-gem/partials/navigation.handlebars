@@ -4,8 +4,29 @@
             {{> universal-icon name="crown" class="royal-icon"}}
             {{siteName}}
         </a>
-        
-        <ul class="royal-nav-menu">
+
+        <!-- Desktop Navigation -->
+        <ul class="royal-nav-menu desktop-nav" style="display: none;">
+            <li><a href="/{{modelSlug}}{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'home')}}active{{/if}}">Home</a></li>
+            <li><a href="/{{modelSlug}}/about{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'about')}}active{{/if}}">About</a></li>
+            <li><a href="/{{modelSlug}}/gallery{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'gallery')}}active{{/if}}">Gallery</a></li>
+            <li><a href="/{{modelSlug}}/rates{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'rates')}}active{{/if}}">Rates</a></li>
+            <li><a href="/{{modelSlug}}/etiquette{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'etiquette')}}active{{/if}}">Etiquette</a></li>
+            <li><a href="/{{modelSlug}}/calendar{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'calendar')}}active{{/if}}">Calendar</a></li>
+            <li><a href="/{{modelSlug}}/contact{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'contact')}}active{{/if}}">Contact</a></li>
+        </ul>
+
+        <!-- Mobile menu button -->
+        <div class="mobile-menu-btn" style="display: none;">
+            <button type="button" id="mobile-menu-button">
+                <i class="fas fa-bars text-xl" id="menu-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-menu" style="display: none;">
+        <ul>
             <li><a href="/{{modelSlug}}{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'home')}}active{{/if}}">Home</a></li>
             <li><a href="/{{modelSlug}}/about{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'about')}}active{{/if}}">About</a></li>
             <li><a href="/{{modelSlug}}/gallery{{previewParam}}" class="royal-nav-link {{#if (eq pageType 'gallery')}}active{{/if}}">Gallery</a></li>
@@ -16,3 +37,90 @@
         </ul>
     </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const desktopNav = document.querySelector('.desktop-nav');
+    const menuIcon = document.getElementById('menu-icon');
+    const mobileMenuBtnContainer = document.querySelector('.mobile-menu-btn');
+
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            mobileMenuBtnContainer.style.display = 'block';
+            desktopNav.style.display = 'none';
+            mobileMenu.style.display = 'none';
+            menuIcon.className = 'fas fa-bars text-xl';
+        } else {
+            mobileMenuBtnContainer.style.display = 'none';
+            desktopNav.style.display = 'flex';
+            mobileMenu.style.display = 'none';
+        }
+    }
+
+    mobileMenuBtn?.addEventListener('click', function() {
+        if (mobileMenu.style.display === 'none' || !mobileMenu.style.display) {
+            mobileMenu.style.display = 'block';
+            menuIcon.className = 'fas fa-times text-xl';
+        } else {
+            mobileMenu.style.display = 'none';
+            menuIcon.className = 'fas fa-bars text-xl';
+        }
+    });
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+});
+</script>
+
+<style>
+/* Royal Gem Mobile Menu Styling */
+#mobile-menu {
+    background: var(--theme-surface);
+    border-top: 1px solid var(--theme-border);
+}
+
+#mobile-menu ul {
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+}
+
+#mobile-menu li {
+    margin: 0;
+}
+
+#mobile-menu a {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--theme-text);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+#mobile-menu a:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--theme-accent);
+}
+
+#mobile-menu a.active {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--theme-accent);
+    font-weight: 600;
+}
+
+.mobile-menu-btn button {
+    background: transparent;
+    border: none;
+    color: var(--theme-accent);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s;
+}
+
+.mobile-menu-btn button:hover {
+    color: var(--theme-text);
+}
+</style>

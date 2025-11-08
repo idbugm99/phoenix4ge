@@ -33,25 +33,66 @@ h4 { font-size: clamp(1.125rem, 3vw, 1.5rem); line-height: 1.5; }
 p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
 
 /* ============================================
-   NAVIGATION - UNIVERSAL
+   NAVIGATION - MODERN THEME SPECIFIC
    ============================================ */
 
 @media (max-width: 768px) {
-    nav, .nav, .navbar {
+    /* Hide desktop navigation on mobile */
+    .modern-nav .hidden.md\:block {
+        display: none !important;
+    }
+
+    /* Show mobile menu button */
+    .modern-nav .md\:hidden {
+        display: block !important;
+    }
+
+    /* Mobile menu - hidden by default, must have 'hidden' class removed by JS */
+    .modern-nav #modern-mobile-menu.hidden {
+        display: none !important;
+    }
+
+    /* Mobile menu styling when visible */
+    .modern-nav #modern-mobile-menu:not(.hidden) {
+        display: block !important;
+        position: relative !important;
+    }
+
+    .modern-nav #modern-mobile-menu .nav-link {
+        display: block !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 1.125rem !important;
+        min-height: 44px !important;
+        text-align: left !important;
+    }
+
+    /* Hide chevrons in mobile navigation */
+    .modern-nav #modern-mobile-menu .nav-link i {
+        display: none !important;
+    }
+
+    /* Footer navigation chevrons - keep them visible */
+    footer .nav-link i,
+    footer a i.fa-chevron-right {
+        display: inline-block !important;
+    }
+
+    /* Generic nav rules for non-Modern elements */
+    nav:not(.modern-nav), .nav, .navbar {
         position: relative;
     }
 
-    nav ul, .nav ul, .navbar ul {
+    nav:not(.modern-nav) ul, .nav ul, .navbar ul {
         flex-direction: column !important;
     }
 
-    nav li, .nav li, .navbar li {
+    nav:not(.modern-nav) li, .nav li, .navbar li {
         width: 100%;
         text-align: center;
         padding: 0.75rem 1rem;
     }
 
-    nav a, .nav a, .navbar a {
+    nav:not(.modern-nav) a, .nav a, .navbar a {
         display: block;
         padding: 0.75rem 1rem;
         font-size: 1.125rem;
@@ -303,7 +344,76 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
    CALENDAR
    ============================================ */
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
+    /* Reduce hero section dramatically on calendar page */
+    .hero-section,
+    section[style*="min-height: 40vh"] {
+        min-height: 20vh !important;
+        padding: 2rem 1rem !important;
+    }
+
+    .hero-section h1,
+    .hero-section h1[style*="font-size: 3.75rem"] {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .hero-section p,
+    .hero-section p[style*="font-size: 1.25rem"] {
+        font-size: 1rem !important;
+    }
+
+    /* Reduce main container padding */
+    .container.mx-auto.px-4.py-16 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    /* Calendar navigation - keep side by side, make compact */
+    .flex.justify-between.items-center.mb-12 {
+        margin-bottom: 2rem !important;
+        gap: 0.5rem !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .flex.justify-between.items-center.mb-12 button {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem !important;
+        min-height: 44px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Month title - match Royal Gem sizing */
+    #month-title {
+        font-size: 1.5rem !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+    }
+
+    /* Hide calendar grid container completely - Multiple selectors for reliability */
+    .bg-white.rounded-xl.shadow-lg.border.border-gray-200.overflow-hidden.mb-12:has(#calendar-grid) {
+        display: none !important;
+    }
+
+    /* Fallback: hide any container with calendar-grid inside */
+    .bg-white.rounded-xl:has(#calendar-grid) {
+        display: none !important;
+    }
+
+    /* Direct hide of calendar grid and header */
+    #calendar-grid,
+    .grid.grid-cols-7 {
+        display: none !important;
+    }
+
+    /* Force list view to show */
+    .modern-list-view,
+    #list-view {
+        display: block !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
     .calendar-container, [class*="calendar"] {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -321,7 +431,7 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
 }
 
 /* ============================================
-   FOOTER
+   FOOTER - MODERN THEME
    ============================================ */
 
 @media (max-width: 768px) {
@@ -329,19 +439,40 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
         padding: 2rem 1rem !important;
     }
 
-    .footer-columns, footer [class*="grid"], footer [class*="flex"] {
-        flex-direction: column !important;
+    /* Modern grid system */
+    footer .modern-grid,
+    footer .modern-grid-4 {
+        grid-template-columns: 1fr !important;
         gap: 2rem !important;
     }
 
-    .footer-column, footer [class*="col"] {
-        width: 100% !important;
+    /* Column span fix */
+    footer .col-span-2 {
+        grid-column: span 1 !important;
+    }
+
+    /* Footer links - keep left-aligned */
+    footer ul {
+        text-align: left !important;
+    }
+
+    footer ul li a {
+        justify-content: flex-start !important;
+    }
+
+    /* Social icons - center them */
+    footer .flex.space-x-3 {
+        justify-content: center !important;
+        margin-top: 1.5rem !important;
+    }
+
+    /* Bottom bar - stack on mobile */
+    footer .flex.flex-col.md\:flex-row {
         text-align: center !important;
     }
 
-    .social-icons, [class*="social"] {
+    footer .flex.items-center.space-x-2 {
         justify-content: center !important;
-        margin-top: 1rem !important;
     }
 }
 

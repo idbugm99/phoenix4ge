@@ -38,13 +38,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="calendar-nav flex items-center justify-between glamour-card p-4">
             <button id="prev-month" class="flex items-center px-4 py-2 rounded-lg transition-colors" style="color: var(--theme-primary); border: 1px solid var(--theme-border);">
-                <i class="fas fa-chevron-left mr-2"></i>Previous
+                <i class="fas fa-chevron-left"></i><span class="hidden md:inline ml-2">Previous</span>
             </button>
             <h2 id="month-title" class="text-2xl font-bold" style="color: var(--theme-text); font-family: var(--font-display);">
                 Loading...
             </h2>
             <button id="next-month" class="flex items-center px-4 py-2 rounded-lg transition-colors" style="color: var(--theme-primary); border: 1px solid var(--theme-border);">
-                Next<i class="fas fa-chevron-right ml-2"></i>
+                <span class="hidden md:inline mr-2">Next</span><i class="fas fa-chevron-right"></i>
             </button>
         </div>
     </div>
@@ -74,7 +74,7 @@
         </div>
         
         <!-- Status Legend -->
-        <div class="mt-8 glamour-card p-6">
+        <div class="mt-8 glamour-card p-6 hidden md:block">
             <h3 class="text-lg font-semibold mb-4" style="color: var(--theme-text);">Calendar Legend</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="flex items-center space-x-2">
@@ -143,9 +143,9 @@ class CalendarManager {
         this.currentMonth = new Date().getMonth() + 1;
         this.currentYear = new Date().getFullYear();
         this.isMobile = window.innerWidth < 768;
-        this.currentView = 'month';
+        this.currentView = this.isMobile ? 'list' : 'month';
         this.calendarData = null;
-        
+
         this.initializeEventListeners();
         this.loadCalendarData();
     }
@@ -180,7 +180,12 @@ class CalendarManager {
             if (data.success) {
                 this.calendarData = data.data;
                 this.updateMonthTitle();
-                this.renderCalendar();
+                // Render based on current view
+                if (this.currentView === 'list') {
+                    this.renderListView();
+                } else {
+                    this.renderCalendar();
+                }
             } else {
                 this.showError('Calendar data unavailable');
             }
@@ -221,8 +226,12 @@ class CalendarManager {
     updateMonthTitle() {
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                           'July', 'August', 'September', 'October', 'November', 'December'];
-        document.getElementById('month-title').textContent = 
-            `${monthNames[this.currentMonth - 1]} ${this.currentYear}`;
+        const shortMonthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const isMobile = window.innerWidth < 768;
+        const monthName = isMobile ? shortMonthNames[this.currentMonth - 1] : monthNames[this.currentMonth - 1];
+        document.getElementById('month-title').textContent =
+            `${monthName} ${this.currentYear}`;
     }
     
     renderCalendar() {

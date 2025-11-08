@@ -8,7 +8,7 @@
             </div>
             
             <!-- Desktop Navigation -->
-            <div class="hidden md:block">
+            <div class="desktop-nav" style="display: none;">
                 <div class="ml-10 flex items-baseline space-x-8">
                     {{#each navigation}}
                     <a href="{{this.url}}" 
@@ -23,12 +23,12 @@
             </div>
             
             <!-- Mobile menu button -->
-            <div class="md:hidden">
-                <button type="button" 
+            <div class="mobile-menu-btn" style="display: none;">
+                <button type="button"
                         class="bg-transparent inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-luxury-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-luxury-primary"
-                        aria-controls="mobile-menu" 
+                        aria-controls="mobile-menu"
                         aria-expanded="false"
-                        onclick="toggleMobileMenu()">
+                        id="mobile-menu-button">
                     <span class="sr-only">Open main menu</span>
                     <i class="fas fa-bars text-xl" id="menu-icon"></i>
                 </button>
@@ -37,10 +37,10 @@
     </div>
     
     <!-- Mobile Navigation Menu -->
-    <div class="md:hidden hidden" id="mobile-menu">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+    <div id="mobile-menu" style="display: none; background-color: #1a1a1a; opacity: 1;">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3" style="background-color: #1a1a1a; border-top: 1px solid #6b7280;">
             {{#each navigation}}
-            <a href="{{this.url}}" 
+            <a href="{{this.url}}"
                class="nav-link block px-3 py-2 text-base {{#if this.active}}active{{/if}}">
                 {{this.name}}
             </a>
@@ -50,18 +50,69 @@
 </nav>
 
 <script>
-function toggleMobileMenu() {
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
+    const desktopNav = document.querySelector('.desktop-nav');
     const menuIcon = document.getElementById('menu-icon');
-    
-    if (mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.remove('hidden');
-        menuIcon.classList.remove('fa-bars');
-        menuIcon.classList.add('fa-times');
-    } else {
-        mobileMenu.classList.add('hidden');
-        menuIcon.classList.remove('fa-times');
-        menuIcon.classList.add('fa-bars');
+    const mobileMenuBtnContainer = document.querySelector('.mobile-menu-btn');
+
+    // Show mobile menu button on small screens
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            mobileMenuBtnContainer.style.display = 'block';
+            desktopNav.style.display = 'none';
+            mobileMenu.style.display = 'none';
+            menuIcon.className = 'fas fa-bars text-xl';
+        } else {
+            mobileMenuBtnContainer.style.display = 'none';
+            desktopNav.style.display = 'block';
+            mobileMenu.style.display = 'none';
+        }
     }
-}
+
+    // Toggle mobile menu
+    mobileMenuBtn?.addEventListener('click', function() {
+        if (mobileMenu.style.display === 'none' || !mobileMenu.style.display) {
+            mobileMenu.style.display = 'block';
+            menuIcon.className = 'fas fa-times text-xl';
+        } else {
+            mobileMenu.style.display = 'none';
+            menuIcon.className = 'fas fa-bars text-xl';
+        }
+    });
+
+    // Handle resize
+    window.addEventListener('resize', handleResize);
+    handleResize();
+});
 </script>
+
+<style>
+/* BDSM Theme Mobile Menu Styling using CSS variables */
+/* Background set via inline styles to avoid conflicts */
+
+#mobile-menu a {
+    color: var(--bdsm-silver) !important;
+    transition: all 0.3s !important;
+}
+
+#mobile-menu a:hover {
+    background: rgba(255, 255, 255, var(--bdsm-opacity-subtle)) !important;
+    color: var(--bdsm-contrast) !important;
+}
+
+#mobile-menu a.active {
+    background: var(--bdsm-primary) !important;
+    color: var(--bdsm-contrast) !important;
+}
+
+.mobile-menu-btn button {
+    color: var(--bdsm-silver) !important;
+}
+
+.mobile-menu-btn button:hover {
+    background: rgba(255, 255, 255, var(--bdsm-opacity-subtle)) !important;
+    color: var(--bdsm-contrast) !important;
+}
+</style>

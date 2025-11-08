@@ -30,7 +30,7 @@
                         {{siteName}}
                     </h3>
                 </div>
-                <p class="text-white/80 text-lg leading-relaxed mb-6 max-w-md">
+                <p class="text-white text-lg leading-relaxed mb-6 max-w-md">
                     Elegance, sophistication, and discretion. Creating memorable experiences with the highest standards of professionalism.
                 </p>
                 <div class="flex space-x-4">
@@ -43,15 +43,15 @@
             </div>
             
             <!-- Quick Links -->
-            <div>
+            <div class="hidden md:block">
                 <h4 class="text-lg font-semibold mb-4" style="font-family: var(--font-display);">
                     Quick Links
                 </h4>
                 <ul class="space-y-3">
                     {{#each navigation}}
                     <li>
-                        <a href="{{this.url}}" 
-                           class="text-white/80 hover:text-white transition-colors duration-300 flex items-center">
+                        <a href="{{this.url}}"
+                           class="text-white hover:text-white/90 transition-colors duration-300 flex items-center">
                             <i class="fas fa-chevron-right mr-2 text-xs opacity-60"></i>
                             {{this.name}}
                         </a>
@@ -68,34 +68,34 @@
                 <div class="space-y-4">
                     {{#if contactEmail}}
                     <div class="flex items-start">
-                        <i class="fas fa-envelope mt-1 mr-3 text-white/60"></i>
-                        <a href="mailto:{{contactEmail}}" 
-                           class="text-white/80 hover:text-white transition-colors duration-300">
+                        <i class="fas fa-envelope mt-1 mr-3 text-white"></i>
+                        <a href="mailto:{{contactEmail}}"
+                           class="text-white hover:text-white/90 transition-colors duration-300">
                             {{contactEmail}}
                         </a>
                     </div>
                     {{/if}}
-                    
+
                     {{#if contactPhone}}
                     <div class="flex items-start">
-                        <i class="fas fa-phone mt-1 mr-3 text-white/60"></i>
-                        <a href="tel:{{contactPhone}}" 
-                           class="text-white/80 hover:text-white transition-colors duration-300">
+                        <i class="fas fa-phone mt-1 mr-3 text-white"></i>
+                        <a href="tel:{{contactPhone}}"
+                           class="text-white hover:text-white/90 transition-colors duration-300">
                             {{contactPhone}}
                         </a>
                     </div>
                     {{/if}}
-                    
+
                     {{#if location}}
                     <div class="flex items-start">
-                        <i class="fas fa-map-marker-alt mt-1 mr-3 text-white/60"></i>
-                        <span class="text-white/80">{{location}}</span>
+                        <i class="fas fa-map-marker-alt mt-1 mr-3 text-white"></i>
+                        <span class="text-white">{{location}}</span>
                     </div>
                     {{/if}}
-                    
+
                     <div class="flex items-start">
-                        <i class="fas fa-shield-alt mt-1 mr-3 text-white/60"></i>
-                        <span class="text-white/80 text-sm">Confidential & Discreet</span>
+                        <i class="fas fa-shield-alt mt-1 mr-3 text-white"></i>
+                        <span class="text-white text-sm">Confidential & Discreet</span>
                     </div>
                 </div>
             </div>
@@ -106,21 +106,21 @@
         
         <!-- Bottom Section -->
         <div class="flex flex-col md:flex-row justify-between items-center">
-            <div class="text-white/60 text-sm mb-4 md:mb-0">
+            <div class="text-white text-sm mb-4 md:mb-0">
                 &copy; {{year}} {{siteName}}. All rights reserved.
             </div>
-            
-            <div class="flex items-center space-x-6 text-white/60 text-sm">
-                <a href="/{{modelSlug}}/etiquette{{previewParam}}" 
-                   class="hover:text-white transition-colors duration-300">
+
+            <div class="flex items-center space-x-6 text-white text-sm">
+                <a href="/{{modelSlug}}/etiquette{{previewParam}}"
+                   class="hover:text-white/90 transition-colors duration-300">
                     Guidelines
                 </a>
-                <span class="text-white/40">•</span>
-                <a href="/{{modelSlug}}/contact{{previewParam}}" 
-                   class="hover:text-white transition-colors duration-300">
+                <span class="text-white/70">•</span>
+                <a href="/{{modelSlug}}/contact{{previewParam}}"
+                   class="hover:text-white/90 transition-colors duration-300">
                     Privacy
                 </a>
-                <span class="text-white/40">•</span>
+                <span class="text-white/70">•</span>
                 <span class="text-xs">
                     Professional Services
                 </span>

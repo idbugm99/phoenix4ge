@@ -37,28 +37,66 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
    ============================================ */
 
 @media (max-width: 768px) {
-    nav, .nav, .navbar {
-        position: relative;
+    /* Show hamburger button on mobile */
+    .dark-hamburger {
+        display: block !important;
+        min-height: 44px;
+        min-width: 44px;
     }
 
-    nav ul, .nav ul, .navbar ul {
+    /* Hide site name on very small screens to save space */
+    @media (max-width: 480px) {
+        .dark-site-name {
+            display: none;
+        }
+    }
+
+    /* Hide nav menu by default on mobile */
+    .dark-nav-menu {
+        position: absolute !important;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--theme-surface) !important;
+        border-top: 1px solid var(--theme-border);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        display: none !important;
         flex-direction: column !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        z-index: 99;
     }
 
-    nav li, .nav li, .navbar li {
+    /* Show nav menu when toggled open */
+    .dark-nav-menu.dark-nav-open {
+        display: flex !important;
+    }
+
+    /* Style nav items for mobile */
+    .dark-nav-menu li {
         width: 100%;
         text-align: center;
-        padding: 0.75rem 1rem;
+        padding: 0;
+        border-bottom: 1px solid var(--theme-border);
     }
 
-    nav a, .nav a, .navbar a {
-        display: block;
-        padding: 0.75rem 1rem;
-        font-size: 1.125rem;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .dark-nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .dark-nav-menu a {
+        display: block !important;
+        padding: 1rem 1.5rem !important;
+        font-size: 1.125rem !important;
+        min-height: 44px !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    /* Override generic nav styles */
+    nav, .nav, .navbar {
+        position: relative;
     }
 }
 
@@ -303,7 +341,45 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
    CALENDAR
    ============================================ */
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
+    /* Reduce hero section padding on phones */
+    section[style*="min-height: 60vh"] {
+        min-height: 40vh !important;
+        padding: 2rem 1rem !important;
+    }
+
+    /* Fix calendar navigation - keep side by side, make compact */
+    div[style*="justify-content: space-between"][style*="align-items: center"] {
+        gap: 0.5rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Make navigation buttons more compact */
+    #boudoir-prev-month,
+    #boudoir-next-month {
+        padding: 0.75rem 0.875rem !important;
+        font-size: 0.875rem !important;
+        min-height: 44px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Hide SVG icons in navigation buttons on phones */
+    #boudoir-prev-month svg,
+    #boudoir-next-month svg {
+        display: none !important;
+    }
+
+    /* Center month title and reduce font size */
+    #boudoir-month-title {
+        font-size: 1.125rem !important;
+        text-align: center !important;
+        flex: 1 !important;
+        min-width: auto !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
     .calendar-container, [class*="calendar"] {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;

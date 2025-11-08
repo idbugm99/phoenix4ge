@@ -62,6 +62,51 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     }
 }
 
+/* CRITICAL: Basic Theme Mobile Navigation Responsive Rules */
+@media (max-width: 767px) {
+    /* Hide desktop navigation on mobile */
+    .desktop-menu {
+        display: none !important;
+    }
+
+    /* Show mobile menu button */
+    .mobile-menu-btn {
+        display: block !important;
+    }
+
+    /* Show mobile menu when toggled with "show" class */
+    #mobile-menu.show {
+        display: block !important;
+    }
+
+    /* Hide rates page mobile tabs - let users scroll instead */
+    .md\:hidden.overflow-x-auto {
+        display: none !important;
+    }
+
+    /* Hide rates page sticky nav on mobile */
+    #sticky-nav {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Show desktop navigation on desktop */
+    .desktop-menu {
+        display: flex !important;
+    }
+
+    /* Hide mobile menu button */
+    .mobile-menu-btn {
+        display: none !important;
+    }
+
+    /* Hide mobile menu itself on desktop */
+    #mobile-menu {
+        display: none !important;
+    }
+}
+
 /* ============================================
    HERO SECTIONS
    ============================================ */
@@ -337,6 +382,18 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     .footer-column, footer [class*="col"] {
         width: 100% !important;
         text-align: center !important;
+    }
+
+    /* Hide Quick Links section on mobile - multiple targeting approaches */
+    footer .grid > div:nth-child(3),
+    footer div.hidden,
+    footer [class*="hidden"] {
+        display: none !important;
+    }
+
+    /* Override Tailwind md:block on mobile */
+    footer .md\:block {
+        display: none !important;
     }
 
     .social-icons, [class*="social"] {

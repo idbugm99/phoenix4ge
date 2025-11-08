@@ -65,21 +65,19 @@
         </div>
         
         <!-- Calendar Navigation -->
-        {{#if calendar_content.calendar_navigation_visible}}
         <div class="flex justify-between items-center mb-8" data-aos="fade-up">
             <button id="prev-month" class="px-6 py-3 border-2 theme-border-accent theme-accent rounded-lg font-semibold transition-colors hover:theme-accent-bg hover:theme-text-inverted">
                 <i class="fas fa-chevron-left mr-2"></i>
                 <span>Previous</span>
             </button>
-            
+
             <h2 id="month-title" class="text-3xl font-bold theme-header text-center"></h2>
-            
+
             <button id="next-month" class="px-6 py-3 border-2 theme-border-accent theme-accent rounded-lg font-semibold transition-colors hover:theme-accent-bg hover:theme-text-inverted">
                 <span>Next</span>
                 <i class="fas fa-chevron-right ml-2"></i>
             </button>
         </div>
-        {{/if}}
 
         <!-- Calendar Container -->
         <div id="calendar-container" class="theme-card rounded-lg shadow-lg overflow-hidden mb-8">
@@ -474,12 +472,47 @@
     }
 }
 
+/* Phone only (≤640px) - List view, NO toggle buttons */
 @media (max-width: 640px) {
     #calendar-container {
         display: none !important;
     }
+
     #list-container {
         display: block !important;
+    }
+
+    /* Hide the toggle button container on phones */
+    .flex.justify-center.mb-6.md\:hidden {
+        display: none !important;
+    }
+
+    /* Reduce hero section height on phones */
+    .h-96 {
+        height: 16rem !important;
+    }
+
+    /* Reduce hero padding */
+    section.relative.overflow-hidden {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    /* Hide decorative dividers on phones */
+    .bdsm-chain-divider,
+    .bdsm-divider {
+        display: none !important;
+    }
+
+    /* Reduce main calendar section padding */
+    .py-16 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    /* Reduce navigation margin */
+    .mb-8 {
+        margin-bottom: 1rem !important;
     }
 }
 

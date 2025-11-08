@@ -24,21 +24,23 @@
         {{!-- Calendar Container --}}
         <div class="max-w-6xl mx-auto">
             {{!-- Calendar Navigation --}}
-            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 3rem; gap: 0.5rem;">
-                <button onclick="document.getElementById('prev-month').click()"
-                        style="display: inline-flex; align-items: center; padding: 0.75rem 1rem; background: {{theme.colors.primary}}; color: {{theme.colors.primary-text}}; border-radius: 0.5rem; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; order: 1;"
+            <div class="flex justify-between items-center mb-12">
+                <button onclick="document.getElementById('prev-month').click()" 
+                        style="display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: {{theme.colors.primary}}; color: {{theme.colors.primary-text}}; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s ease;"
                         onmouseover="this.style.background='{{theme.colors.btn-bg-hover}}'"
                         onmouseout="this.style.background='{{theme.colors.primary}}'">
-                    {{#if calendar_content.nav_previous_text}}{{calendar_content.nav_previous_text}}{{else}}Previous{{/if}}
+                    <i class="fas fa-chevron-left" style="margin-right: 0.5rem;"></i>
+                    {{#if calendar_content.nav_previous_text}}{{calendar_content.nav_previous_text}}{{else}}← Previous{{/if}}
                 </button>
-                <h2 id="month-title" style="color: {{theme.colors.text}}; font-size: 1.5rem; font-weight: 700; text-align: center; flex: 1; order: 2;"></h2>
-                <button onclick="document.getElementById('next-month').click()"
-                        style="display: inline-flex; align-items: center; padding: 0.75rem 1rem; background: {{theme.colors.primary}}; color: {{theme.colors.primary-text}}; border-radius: 0.5rem; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; order: 3;"
+                <h2 id="month-title" class="text-4xl font-black tracking-tight" style="color: {{theme.colors.text}};"></h2>
+                <button onclick="document.getElementById('next-month').click()" 
+                        style="display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: {{theme.colors.primary}}; color: {{theme.colors.primary-text}}; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s ease;"
                         onmouseover="this.style.background='{{theme.colors.btn-bg-hover}}'"
                         onmouseout="this.style.background='{{theme.colors.primary}}'">
-                    {{#if calendar_content.nav_next_text}}{{calendar_content.nav_next_text}}{{else}}Next{{/if}}
+                    {{#if calendar_content.nav_next_text}}{{calendar_content.nav_next_text}}{{else}}Next →{{/if}}
+                    <i class="fas fa-chevron-right" style="margin-left: 0.5rem;"></i>
                 </button>
-
+                
                 <!-- Hidden actual navigation buttons for functionality -->
                 <button id="prev-month" style="display: none;"></button>
                 <button id="next-month" style="display: none;"></button>
@@ -235,45 +237,72 @@
 }
 
 /* Mobile Responsive */
-/* Phone only (≤640px) - List view specific styles */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+    .modern-mobile-toggle {
+        display: flex;
+    }
+    
+    .modern-toggle-btn span {
+        display: none;
+    }
+    
+    .modern-toggle-btn {
+        padding: 10px 14px;
+    }
+    
+    /* Default to list view on mobile */
+    .bg-white.rounded-3xl.shadow-2xl.border.border-gray-100.overflow-hidden.mb-12:not(.modern-list-view) {
+        display: none !important;
+    }
+    
+    .modern-list-view {
+        display: block !important;
+    }
+    
+    .modern-toggle-btn[data-view="list"] {
+        background: #111827;
+        color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modern-toggle-btn[data-view="month"] {
+        background: transparent;
+        color: #6B7280;
+    }
+    
     .modern-list-date {
         min-width: 80px;
         font-size: 14px;
     }
-
+    
     .modern-list-status {
         margin-left: 1rem;
     }
-
+    
     .modern-list-status-text {
         font-size: 14px;
     }
 }
 
-/* Tablet (641px-768px) - List view specific styles */
-@media (min-width: 641px) and (max-width: 768px) {
-    .modern-list-date {
-        min-width: 80px;
-        font-size: 14px;
-    }
-
-    .modern-list-status {
-        margin-left: 1rem;
-    }
-
-    .modern-list-status-text {
-        font-size: 14px;
-    }
-}
 @media (max-width: 480px) {
+    .flex.justify-between.items-center.mb-12 {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    #month-title {
+        order: -1;
+        font-size: 2rem !important;
+    }
+    
     .modern-list-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
         padding: 1rem 0;
     }
-
+    
     .modern-list-status {
         margin-left: 0;
     }
@@ -324,10 +353,9 @@
             currentYear = year;
             currentMonth = month;
             
-            // Update month title with short month format
+            // Update month title
             if (monthTitle) {
-                const shortMonth = calendar.monthName.substring(0, 3);
-                monthTitle.textContent = `${shortMonth} ${calendar.year}`;
+                monthTitle.textContent = `${calendar.monthName} ${calendar.year}`;
             }
             
             // Generate calendar grid

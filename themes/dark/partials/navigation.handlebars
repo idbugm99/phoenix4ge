@@ -1,4 +1,4 @@
-<nav style="background: var(--theme-surface); border-bottom: 1px solid var(--theme-border); padding: 1rem 0; position: static; z-index: 100;">
+<nav style="background: var(--theme-surface); border-bottom: 1px solid var(--theme-border); padding: 1rem 0; position: relative; z-index: 100;">
     <div class="boudoir-container" style="display: flex; align-items: center; justify-content: space-between;">
         <a href="/" style="display: flex; align-items: center; gap: 0.75rem; color: var(--theme-accent); text-decoration: none; font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;">
             <svg width="32" height="32" viewBox="0 0 80 80" style="color: var(--theme-primary);">
@@ -11,10 +11,19 @@
                 <circle cx="40" cy="40" r="30" fill="none" stroke="url(#nav-gradient)" stroke-width="3" opacity="0.8"/>
                 <circle cx="40" cy="40" r="8" fill="url(#nav-gradient)" opacity="0.9"/>
             </svg>
-            {{siteName}}
+            <span class="dark-site-name">{{siteName}}</span>
         </a>
-        
-        <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 2rem; align-items: center;">
+
+        <!-- Hamburger Menu Button (Mobile Only) -->
+        <button id="dark-menu-toggle" class="dark-hamburger" style="display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--theme-text);" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <ul id="dark-nav-menu" class="dark-nav-menu" style="display: flex; list-style: none; margin: 0; padding: 0; gap: 2rem; align-items: center;">
             <li><a href="/{{modelSlug}}{{previewParam}}" style="color: var(--theme-text); text-decoration: none; font-weight: 500; padding: 0.5rem 1rem; border-radius: var(--radius-md); transition: all 0.3s ease; {{#if (eq pageType 'home')}}background: var(--theme-primary); color: var(--theme-bg);{{/if}}" class="{{#if (eq pageType 'home')}}active{{/if}}">Home</a></li>
             <li><a href="/{{modelSlug}}/about{{previewParam}}" style="color: var(--theme-text); text-decoration: none; font-weight: 500; padding: 0.5rem 1rem; border-radius: var(--radius-md); transition: all 0.3s ease; {{#if (eq pageType 'about')}}background: var(--theme-primary); color: var(--theme-bg);{{/if}}" class="{{#if (eq pageType 'about')}}active{{/if}}">About</a></li>
             <li><a href="/{{modelSlug}}/gallery{{previewParam}}" style="color: var(--theme-text); text-decoration: none; font-weight: 500; padding: 0.5rem 1rem; border-radius: var(--radius-md); transition: all 0.3s ease; {{#if (eq pageType 'gallery')}}background: var(--theme-primary); color: var(--theme-bg);{{/if}}" class="{{#if (eq pageType 'gallery')}}active{{/if}}">Gallery</a></li>
@@ -25,3 +34,25 @@
         </ul>
     </div>
 </nav>
+
+<script>
+// Dark theme mobile menu toggle
+(function() {
+    const menuToggle = document.getElementById('dark-menu-toggle');
+    const navMenu = document.getElementById('dark-nav-menu');
+
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('dark-nav-open');
+        });
+
+        // Close menu when clicking a link
+        const navLinks = navMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('dark-nav-open');
+            });
+        });
+    }
+})();
+</script>
