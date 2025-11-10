@@ -206,5 +206,17 @@
     .gallery-slideshow-dots {
         gap: 0.5rem !important;
     }
+
+    /* Adjust grid columns for tablet */
+    :root {
+        --gallery-grid-columns-desktop: 2;
+    }
+}
+
+/* Very small screens - single column */
+@media (max-width: 480px) {
+    :root {
+        --gallery-grid-columns-desktop: 1;
+    }
 }
 </style>
