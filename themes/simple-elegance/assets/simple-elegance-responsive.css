@@ -378,6 +378,13 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
         padding: 2rem 1rem !important;
     }
 
+    /* Hide footer brand, quick links, and contact sections on mobile */
+    .footer-brand,
+    .footer-links,
+    .footer-contact {
+        display: none !important;
+    }
+
     .footer-columns, footer [class*="grid"], footer [class*="flex"] {
         flex-direction: column !important;
         gap: 2rem !important;
@@ -391,6 +398,11 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     .social-icons, [class*="social"] {
         justify-content: center !important;
         margin-top: 1rem !important;
+    }
+
+    /* Reduce footer content padding on mobile */
+    .footer-content {
+        padding: 1.5rem 1rem 1rem !important;
     }
 }
 

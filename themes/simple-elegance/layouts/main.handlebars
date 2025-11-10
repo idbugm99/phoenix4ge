@@ -30,6 +30,8 @@
     <!-- Preload Critical Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Responsive Design -->
     <link rel="stylesheet" href="/themes/simple-elegance/assets/simple-elegance-responsive.css">
 </head>
@@ -52,20 +54,22 @@
             </div>
             
             <!-- Navigation Links -->
-            <div class="nav-links" style="display: flex; align-items: center; gap: 2rem;">
+            <div class="desktop-nav nav-links" style="display: none; align-items: center; gap: 2rem;">
                 {{#each navigation}}
-                <a href="{{this.url}}" 
-                   class="nav-link {{#if this.active}}active{{/if}}" 
+                <a href="{{this.url}}"
+                   class="nav-link {{#if this.active}}active{{/if}}"
                    style="text-decoration: none; color: {{#if this.active}}var(--theme-primary){{else}}var(--theme-text){{/if}}; font-weight: {{#if this.active}}600{{else}}500{{/if}}; font-family: var(--font-body); transition: color 0.3s ease;">
                     {{this.name}}
                 </a>
                 {{/each}}
             </div>
-            
+
             <!-- Mobile Menu Button -->
-            <button class="mobile-menu-btn" style="display: none; background: none; border: none; color: var(--theme-primary); font-size: 1.5rem; cursor: pointer;" aria-label="Toggle menu">
-                ☰
-            </button>
+            <div class="mobile-menu-btn" style="display: none;">
+                <button type="button" id="mobile-menu-button" style="background: none; border: none; color: var(--theme-primary); font-size: 1.5rem; cursor: pointer;" aria-label="Toggle menu">
+                    <i class="fas fa-bars" id="menu-icon"></i>
+                </button>
+            </div>
         </nav>
         
         <!-- Mobile Menu -->
@@ -154,27 +158,37 @@
     <!-- Mobile Menu JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const mobileMenuBtn = document.getElementById('mobile-menu-button');
             const mobileMenu = document.querySelector('.mobile-menu');
-            const navLinks = document.querySelector('.nav-links');
-            
+            const desktopNav = document.querySelector('.desktop-nav');
+            const menuIcon = document.getElementById('menu-icon');
+            const mobileMenuBtnContainer = document.querySelector('.mobile-menu-btn');
+
             // Show mobile menu button on small screens
             function handleResize() {
                 if (window.innerWidth <= 768) {
-                    mobileMenuBtn.style.display = 'block';
-                    navLinks.style.display = 'none';
+                    if (mobileMenuBtnContainer) mobileMenuBtnContainer.style.display = 'block';
+                    if (desktopNav) desktopNav.style.display = 'none';
+                    if (mobileMenu) mobileMenu.style.display = 'none';
+                    if (menuIcon) menuIcon.className = 'fas fa-bars';
                 } else {
-                    mobileMenuBtn.style.display = 'none';
-                    navLinks.style.display = 'flex';
-                    mobileMenu.style.display = 'none';
+                    if (mobileMenuBtnContainer) mobileMenuBtnContainer.style.display = 'none';
+                    if (desktopNav) desktopNav.style.display = 'flex';
+                    if (mobileMenu) mobileMenu.style.display = 'none';
                 }
             }
-            
+
             // Toggle mobile menu
             mobileMenuBtn?.addEventListener('click', function() {
-                mobileMenu.style.display = mobileMenu.style.display === 'none' || !mobileMenu.style.display ? 'block' : 'none';
+                if (mobileMenu.style.display === 'none' || !mobileMenu.style.display) {
+                    mobileMenu.style.display = 'block';
+                    if (menuIcon) menuIcon.className = 'fas fa-times';
+                } else {
+                    mobileMenu.style.display = 'none';
+                    if (menuIcon) menuIcon.className = 'fas fa-bars';
+                }
             });
-            
+
             // Handle resize
             window.addEventListener('resize', handleResize);
             handleResize();
