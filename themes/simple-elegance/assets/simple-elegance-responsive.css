@@ -300,6 +300,47 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
 }
 
 /* ============================================
+   ETIQUETTE PAGE
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Override minmax(500px) to allow single column on mobile */
+    section [style*="minmax(500px"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+
+    /* Override minmax(300px) to allow better mobile layout */
+    section [style*="minmax(300px"] {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    /* Reduce section padding on mobile */
+    section[style*="padding: 6rem"] {
+        padding: 3rem 1rem !important;
+    }
+
+    section[style*="padding: 4rem"] {
+        padding: 2rem 1rem !important;
+    }
+
+    /* Card padding on etiquette page */
+    .rose-card {
+        padding: 1.5rem !important;
+    }
+
+    /* Make card headers smaller on mobile */
+    .rose-card h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .rose-card h4 {
+        font-size: 1.125rem !important;
+    }
+}
+
+/* ============================================
    CALENDAR
    ============================================ */
 
