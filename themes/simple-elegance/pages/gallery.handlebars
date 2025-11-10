@@ -193,18 +193,25 @@
         height: 20px !important;
     }
 
-    /* Force smaller carousel/slideshow dots on mobile */
-    .gallery-carousel-dot,
-    .gallery-slideshow-dot {
-        width: 8px !important;
-        height: 8px !important;
-        min-width: 8px !important;
-        min-height: 8px !important;
-    }
-
+    /* Clean auto-rotating slider on mobile - hide all navigation */
+    .gallery-carousel-nav,
+    .gallery-slideshow-nav,
     .gallery-carousel-dots,
     .gallery-slideshow-dots {
-        gap: 0.5rem !important;
+        display: none !important;
+    }
+
+    /* Clean frame for auto-rotating images */
+    .gallery-carousel-container,
+    .gallery-slideshow-container {
+        padding: 1rem !important;
+        border-radius: 12px !important;
+    }
+
+    .gallery-carousel-viewport,
+    .gallery-slideshow-viewport {
+        border-radius: 8px !important;
+        overflow: hidden !important;
     }
 
     /* Adjust grid columns for tablet */
