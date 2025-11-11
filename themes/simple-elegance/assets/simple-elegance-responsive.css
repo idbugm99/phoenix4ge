@@ -470,13 +470,13 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
 
 @media (max-width: 768px) {
     .section, [class*="section"] {
-        padding-top: 3rem !important;
-        padding-bottom: 3rem !important;
+        padding-top: 0.9rem !important;
+        padding-bottom: 0.9rem !important;
     }
 
     .py-12, .py-16, .py-20, .py-24 {
-        padding-top: 3rem !important;
-        padding-bottom: 3rem !important;
+        padding-top: 0.9rem !important;
+        padding-bottom: 0.9rem !important;
     }
 
     .px-8, .px-12, .px-16 {
