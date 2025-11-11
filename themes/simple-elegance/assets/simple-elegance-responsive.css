@@ -483,6 +483,7 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     .section-header, [class*="section-header"], .section-title, [class*="section-title"] {
         padding-top: 1.5rem !important;
         padding-bottom: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
     }
 
     .px-8, .px-12, .px-16 {
