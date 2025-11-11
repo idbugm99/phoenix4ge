@@ -69,11 +69,11 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
 @media (max-width: 768px) {
     .hero, .hero-section, [class*="hero"] {
         min-height: 60vh !important;
-        padding: 2rem 1rem !important;
+        padding: 0.6rem 1rem !important;
     }
 
     .hero-content, [class*="hero-content"] {
-        padding: 2rem 1rem !important;
+        padding: 0.6rem 1rem !important;
     }
 
     .hero-title, [class*="hero-title"], .hero h1 {
@@ -316,13 +316,13 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
         gap: 1.5rem !important;
     }
 
-    /* Reduce section padding on mobile */
+    /* Reduce section padding on mobile - 70% less vertical spacing */
     section[style*="padding: 6rem"] {
-        padding: 3rem 1rem !important;
+        padding: 0.9rem 1rem !important;
     }
 
     section[style*="padding: 4rem"] {
-        padding: 2rem 1rem !important;
+        padding: 0.6rem 1rem !important;
     }
 
     /* Card padding on etiquette page */
