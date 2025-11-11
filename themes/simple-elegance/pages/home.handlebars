@@ -78,7 +78,7 @@
             
             <!-- About Content -->
             <div>
-                <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+                <div class="section-header" style="text-align: left; margin-bottom: 24px !important;">
                     <h2 style="font-size: clamp(2rem, 4vw, 2.5rem); margin-bottom: 1rem;">
                         {{#if content.about_title}}{{content.about_title}}{{else}}About {{model.name}}{{/if}}
                     </h2>
@@ -123,7 +123,7 @@
 {{#if content.services_section_visible}}
 <section style="padding: 6rem 2rem; background: var(--theme-bg-alt);">
     <div style="max-width: 1200px; margin: 0 auto;">
-        <div class="section-header">
+        <div class="section-header" style="margin-bottom: 24px !important;">
             <h2>{{#if content.services_title}}{{content.services_title}}{{else}}My Services{{/if}}</h2>
             {{#if content.services_subtitle}}
             <p style="font-size: 1.125rem; color: var(--theme-text-subtle); margin-top: 1rem;">{{content.services_subtitle}}</p>
@@ -187,7 +187,7 @@
 {{#if content.gallery_section_visible}}
 <section style="padding: 6rem 2rem; background: var(--theme-surface);">
     <div style="max-width: 1200px; margin: 0 auto;">
-        <div class="section-header">
+        <div class="section-header" style="margin-bottom: 24px !important;">
             <h2>{{#if content.gallery_section_title}}{{content.gallery_section_title}}{{else}}Gallery{{/if}}</h2>
         </div>
         
@@ -218,7 +218,7 @@
 {{#if testimonials}}
 <section style="padding: 6rem 2rem; background: var(--theme-bg-alt);">
     <div style="max-width: 1200px; margin: 0 auto;">
-        <div class="section-header">
+        <div class="section-header" style="margin-bottom: 24px !important;">
             <h2>{{#if content.testimonials_section_title}}{{content.testimonials_section_title}}{{else}}What Clients Say{{/if}}</h2>
         </div>
         
@@ -250,7 +250,7 @@
 {{#if upcomingEvents}}
 <section style="padding: 6rem 2rem; background: var(--theme-surface);">
     <div style="max-width: 1200px; margin: 0 auto;">
-        <div class="section-header">
+        <div class="section-header" style="margin-bottom: 24px !important;">
             <h2>{{#if content.travel_section_title}}{{content.travel_section_title}}{{else}}Where I'll Be{{/if}}</h2>
         </div>
         
