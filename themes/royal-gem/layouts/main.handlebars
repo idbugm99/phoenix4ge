@@ -264,7 +264,7 @@
     </style>
     
     <!-- Dynamic theme color CSS - Load AFTER inline styles so variables override -->
-    <link rel="stylesheet" href="/api/theme-colors/{{#if previewThemeId}}{{previewThemeId}}{{else}}{{themeId}}{{/if}}/css?v={{timestamp}}&force=1{{#if preview.previewPaletteId}}&preview_palette={{preview.previewPaletteId}}{{/if}}">
+    <link rel="stylesheet" href="/api/theme-colors/{{#if previewThemeId}}{{previewThemeId}}{{else}}{{themeId}}{{/if}}/css?v={{timestamp}}&force=1{{#if preview.previewPaletteId}}&preview_palette={{preview.previewPaletteId}}{{else}}{{#if activePaletteId}}&paletteId={{activePaletteId}}{{/if}}{{/if}}">
     <!-- Responsive Design -->
     <link rel="stylesheet" href="/themes/royal-gem/assets/royal-gem-responsive.css">
 </head>

@@ -1,15 +1,15 @@
 <!-- Etiquette Page - RoseMastos Style Structure -->
-<section class="py-16 bg-gray-50 text-gray-800">
+<section class="py-16 theme-bg-light text-base">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Page Header -->
         {{#if etiquette_content.etiquette_header_visible}}
         <div class="text-center mb-12" data-aos="fade-up">
-            <h1 class="text-4xl font-bold mb-6 text-basic-primary">
+            <h1 class="text-4xl font-bold mb-6 text-base">
                 {{#if etiquette_content.page_title}}{{etiquette_content.page_title}}{{else}}Etiquette & Guidelines{{/if}}
             </h1>
             {{#if etiquette_content.page_subtitle}}
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-xl text-subtle max-w-3xl mx-auto">
                 {{etiquette_content.page_subtitle}}
             </p>
             {{/if}}
@@ -21,32 +21,32 @@
             <!-- Booking & Screening -->
             {{#if etiquette_content.etiquette_booking_visible}}
             <div class="bg-white p-8 rounded-2xl shadow-lg" style="box-shadow: 0 10px 30px rgba(2,6,23,0.06);" data-aos="fade-up" data-aos-delay="100">
-                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4" style="color: {{theme.colors.text}}; border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Planning</div>
-                <h2 class="font-semibold mb-6" style="font-size: 22px; line-height: 28px; color: {{theme.colors.text-dark}};">
+                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4 text-base" style="border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Planning</div>
+                <h2 class="font-semibold mb-6 text-base" style="font-size: 22px; line-height: 28px;">
                     {{#if etiquette_content.booking_title}}{{etiquette_content.booking_title}}{{else}}Booking & Screening{{/if}}
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.booking_initial_contact_title}}{{etiquette_content.booking_initial_contact_title}}{{else}}Initial Contact{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.booking_initial_contact_text}}{{etiquette_content.booking_initial_contact_text}}{{else}}Please introduce yourself politely and include your desired date, time, and duration when reaching out.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.booking_screening_title}}{{etiquette_content.booking_screening_title}}{{else}}Screening Process{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.booking_screening_text}}{{etiquette_content.booking_screening_text}}{{else}}For everyone's safety, a brief screening process is required for all new clients. This includes basic verification and references.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.booking_advance_title}}{{etiquette_content.booking_advance_title}}{{else}}Advance Booking{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.booking_advance_text}}{{etiquette_content.booking_advance_text}}{{else}}I prefer bookings made at least 24 hours in advance. Same-day appointments may be available with an additional fee.{{/if}}
                         </p>
                     </div>
@@ -57,32 +57,32 @@
             <!-- Respect & Boundaries - Changed to white card -->
             {{#if etiquette_content.etiquette_respect_visible}}
             <div class="bg-white p-8 rounded-2xl shadow-lg" style="box-shadow: 0 10px 30px rgba(2,6,23,0.06);" data-aos="fade-up" data-aos-delay="200">
-                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4" style="color: {{theme.colors.text}}; border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Mutual Understanding</div>
-                <h2 class="font-semibold mb-6" style="font-size: 22px; line-height: 28px; color: {{theme.colors.text-dark}};">
+                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4 text-base" style="border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Mutual Understanding</div>
+                <h2 class="font-semibold mb-6 text-base" style="font-size: 22px; line-height: 28px;">
                     {{#if etiquette_content.respect_title}}{{etiquette_content.respect_title}}{{else}}Respect & Boundaries{{/if}}
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.respect_mutual_title}}{{etiquette_content.respect_mutual_title}}{{else}}Mutual Respect{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.respect_mutual_text}}{{etiquette_content.respect_mutual_text}}{{else}}I treat all clients with respect and kindness, and I expect the same in return. Rude or disrespectful behavior will not be tolerated.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.respect_boundaries_title}}{{etiquette_content.respect_boundaries_title}}{{else}}Professional Boundaries{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.respect_boundaries_text}}{{etiquette_content.respect_boundaries_text}}{{else}}Our time together is for companionship and social interaction. Please respect all boundaries and guidelines.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.respect_personal_title}}{{etiquette_content.respect_personal_title}}{{else}}Personal Information{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.respect_personal_text}}{{etiquette_content.respect_personal_text}}{{else}}Please do not ask for personal information beyond what is shared publicly. Discretion works both ways.{{/if}}
                         </p>
                     </div>
@@ -95,32 +95,32 @@
             <!-- Hygiene & Presentation -->
             {{#if etiquette_content.etiquette_hygiene_visible}}
             <div class="bg-white p-8 rounded-2xl shadow-lg" style="box-shadow: 0 10px 30px rgba(2,6,23,0.06);" data-aos="fade-up" data-aos-delay="300">
-                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4" style="color: {{theme.colors.text}}; border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Standards</div>
-                <h2 class="font-semibold mb-6" style="font-size: 22px; line-height: 28px; color: {{theme.colors.text-dark}};">
+                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4 text-base" style="border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Standards</div>
+                <h2 class="font-semibold mb-6 text-base" style="font-size: 22px; line-height: 28px;">
                     {{#if etiquette_content.hygiene_title}}{{etiquette_content.hygiene_title}}{{else}}Hygiene & Presentation{{/if}}
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.hygiene_personal_title}}{{etiquette_content.hygiene_personal_title}}{{else}}Personal Hygiene{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.hygiene_personal_text}}{{etiquette_content.hygiene_personal_text}}{{else}}Please arrive freshly showered and well-groomed. Good personal hygiene is essential for a comfortable experience.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.hygiene_attire_title}}{{etiquette_content.hygiene_attire_title}}{{else}}Attire{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.hygiene_attire_text}}{{etiquette_content.hygiene_attire_text}}{{else}}Dress appropriately for our planned activities. I'll always be well-dressed and expect the same consideration.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.hygiene_substances_title}}{{etiquette_content.hygiene_substances_title}}{{else}}Substances{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.hygiene_substances_text}}{{etiquette_content.hygiene_substances_text}}{{else}}Please do not arrive under the influence of alcohol or other substances. Light social drinking during our time is acceptable.{{/if}}
                         </p>
                     </div>
@@ -131,32 +131,32 @@
             <!-- Cancellation Policy -->
             {{#if etiquette_content.etiquette_cancellation_visible}}
             <div class="bg-white p-8 rounded-2xl shadow-lg" style="box-shadow: 0 10px 30px rgba(2,6,23,0.06);" data-aos="fade-up" data-aos-delay="400">
-                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4" style="color: {{theme.colors.text}}; border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Policies</div>
-                <h2 class="font-semibold mb-6" style="font-size: 22px; line-height: 28px; color: {{theme.colors.text-dark}};">
+                <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4 text-base" style="border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Policies</div>
+                <h2 class="font-semibold mb-6 text-base" style="font-size: 22px; line-height: 28px;">
                     {{#if etiquette_content.cancellation_title}}{{etiquette_content.cancellation_title}}{{else}}Cancellation Policy{{/if}}
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.cancellation_advance_title}}{{etiquette_content.cancellation_advance_title}}{{else}}Advance Notice{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.cancellation_advance_text}}{{etiquette_content.cancellation_advance_text}}{{else}}Please provide at least 2 hours notice for cancellations. Last-minute cancellations may result in a cancellation fee.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.cancellation_noshow_title}}{{etiquette_content.cancellation_noshow_title}}{{else}}No-Shows{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.cancellation_noshow_text}}{{etiquette_content.cancellation_noshow_text}}{{else}}No-shows without notice will result in being blacklisted from future bookings.{{/if}}
                         </p>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-dark}};">
+                        <h3 class="font-bold mb-2 text-base" style="font-size: 14px; line-height: 22px;">
                             {{#if etiquette_content.cancellation_my_title}}{{etiquette_content.cancellation_my_title}}{{else}}My Cancellations{{/if}}
                         </h3>
-                        <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+                        <p class="text-base" style="font-size: 16px; line-height: 26px;">
                             {{#if etiquette_content.cancellation_my_text}}{{etiquette_content.cancellation_my_text}}{{else}}In the rare event I need to cancel, I'll provide as much notice as possible and offer to reschedule.{{/if}}
                         </p>
                     </div>
@@ -167,9 +167,9 @@
         
         <!-- Safety & Discretion -->
         {{#if etiquette_content.etiquette_safety_visible}}
-        <div class="bg-gray-900 p-8 rounded-2xl shadow-lg mb-12" data-aos="fade-up" data-aos-delay="500">
-            <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4 text-center w-full" style="color: {{theme.colors.text}}; border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Security</div>
-            <h2 class="font-semibold mb-6 text-center" style="font-size: 22px; line-height: 28px; color: {{theme.colors.text-light}};">
+        <div class="theme-bg-surface p-8 rounded-2xl shadow-lg mb-12" data-aos="fade-up" data-aos-delay="500">
+            <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4 text-center w-full text-base" style="border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Security</div>
+            <h2 class="font-semibold mb-6 text-center text-light" style="font-size: 22px; line-height: 28px;">
                 {{#if etiquette_content.safety_title}}{{etiquette_content.safety_title}}{{else}}Safety & Discretion{{/if}}
             </h2>
             <div class="grid md:grid-cols-3 gap-6">
@@ -179,10 +179,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                         </svg>
                     </div>
-                    <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-light}};">
+                    <h3 class="font-bold mb-2 text-light" style="font-size: 14px; line-height: 22px;">
                         {{#if etiquette_content.safety_confidentiality_title}}{{etiquette_content.safety_confidentiality_title}}{{else}}Confidentiality{{/if}}
                     </h3>
-                    <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text-light}};">
+                    <p class="text-light" style="font-size: 16px; line-height: 26px;">
                         {{#if etiquette_content.safety_confidentiality_text}}{{etiquette_content.safety_confidentiality_text}}{{else}}Your privacy is paramount. All interactions remain strictly confidential.{{/if}}
                     </p>
                 </div>
@@ -192,10 +192,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                         </svg>
                     </div>
-                    <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-light}};">
+                    <h3 class="font-bold mb-2 text-light" style="font-size: 14px; line-height: 22px;">
                         {{#if etiquette_content.safety_environment_title}}{{etiquette_content.safety_environment_title}}{{else}}Safe Environment{{/if}}
                     </h3>
-                    <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text-light}};">
+                    <p class="text-light" style="font-size: 16px; line-height: 26px;">
                         {{#if etiquette_content.safety_environment_text}}{{etiquette_content.safety_environment_text}}{{else}}I maintain a safe, clean, and welcoming environment for all meetings.{{/if}}
                     </p>
                 </div>
@@ -205,10 +205,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                         </svg>
                     </div>
-                    <h3 class="font-bold mb-2" style="font-size: 14px; line-height: 22px; color: {{theme.colors.text-light}};">
+                    <h3 class="font-bold mb-2 text-light" style="font-size: 14px; line-height: 22px;">
                         {{#if etiquette_content.safety_communication_title}}{{etiquette_content.safety_communication_title}}{{else}}Professional Communication{{/if}}
                     </h3>
-                    <p style="font-size: 16px; line-height: 26px; color: {{theme.colors.text-light}};">
+                    <p class="text-light" style="font-size: 16px; line-height: 26px;">
                         {{#if etiquette_content.safety_communication_text}}{{etiquette_content.safety_communication_text}}{{else}}All communications are handled professionally and discreetly.{{/if}}
                     </p>
                 </div>
@@ -218,16 +218,16 @@
         
         <!-- Questions Block -->
         {{#if etiquette_content.etiquette_questions_visible}}
-        <div class="text-center bg-white p-8 rounded-2xl shadow-lg" style="box-shadow: 0 10px 30px rgba(2,6,23,0.06);" data-aos="fade-up" data-aos-delay="700">
-            <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4" style="color: {{theme.colors.text}}; border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Need Help</div>
-            <h3 class="font-semibold mb-4" style="font-size: 22px; line-height: 28px; color: {{theme.colors.text-dark}};">
+        <div class="text-center theme-bg-tertiary p-8 rounded-2xl shadow-lg" style="box-shadow: 0 10px 30px rgba(2,6,23,0.06);" data-aos="fade-up" data-aos-delay="700">
+            <div class="inline-block px-3 py-1 rounded-full text-xs uppercase font-medium tracking-wide mb-4 text-base" style="border: 1px solid {{theme.colors.border-light}}; font-size: 10px;">Need Help</div>
+            <h3 class="font-semibold mb-4 text-base" style="font-size: 22px; line-height: 28px;">
                 {{#if etiquette_content.questions_title}}{{etiquette_content.questions_title}}{{else}}Questions?{{/if}}
             </h3>
-            <p class="mb-6" style="font-size: 16px; line-height: 26px; color: {{theme.colors.text}};">
+            <p class="mb-6 text-base" style="font-size: 16px; line-height: 26px;">
                 {{#if etiquette_content.questions_text}}{{etiquette_content.questions_text}}{{else}}If you have any questions about these guidelines or need clarification, please don't hesitate to reach out.{{/if}}
             </p>
-            <a href="/{{model.slug}}/{{#if etiquette_content.questions_button_link}}{{etiquette_content.questions_button_link}}{{else}}contact{{/if}}" 
-               class="bg-primary text-white px-4 py-2 rounded-full font-semibold hover:bg-primary-700 transition-colors" style="height: 44px; display: inline-flex; align-items: center; justify-content: center;">
+            <a href="/{{model.slug}}/{{#if etiquette_content.questions_button_link}}{{etiquette_content.questions_button_link}}{{else}}contact{{/if}}"
+               class="bg-primary text-inverse px-4 py-2 rounded-full font-semibold hover:bg-primary-700 transition-colors" style="height: 44px; display: inline-flex; align-items: center; justify-content: center;">
                 {{#if etiquette_content.questions_button_text}}{{etiquette_content.questions_button_text}}{{else}}Contact Me{{/if}}
             </a>
         </div>

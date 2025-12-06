@@ -60,13 +60,24 @@
 <style>
 /* Luxury Navigation Styles */
 .luxury-nav {
-    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(253,251,247,0.95));
+    /* Fallback for older browsers */
+    background: var(--theme-surface);
+
+    /* Modern gradient using color-mix */
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--theme-surface) 98%, white 2%),
+        color-mix(in srgb, var(--theme-surface) 96%, var(--theme-bg-alt) 4%)
+    );
+    backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
 
 .luxury-nav.scrolled {
-    background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(253,251,247,0.98));
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--theme-surface) 98%, white 2%),
+        color-mix(in srgb, var(--theme-surface) 96%, var(--theme-bg-alt) 4%)
+    );
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--theme-accent) 15%, transparent 85%);
 }
 
 .luxury-nav-link {

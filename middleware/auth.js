@@ -33,7 +33,7 @@ async function authenticateToken(req, res, next) {
         
         // Get fresh user data from database
         const [users] = await db.execute(
-            'SELECT id, email, role, is_active FROM users WHERE id = ?',
+            'SELECT id, email, role, is_active, appwrite_user_id FROM users WHERE id = ?',
             [decoded.id]
         );
 
@@ -168,9 +168,9 @@ async function optionalAuth(req, res, next) {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
+
         const [users] = await db.execute(
-            'SELECT id, email, role, is_active FROM users WHERE id = ?',
+            'SELECT id, email, role, is_active, appwrite_user_id FROM users WHERE id = ?',
             [decoded.id]
         );
 

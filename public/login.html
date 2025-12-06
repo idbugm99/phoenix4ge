@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Phoenix4GE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group input.error {
+            border-color: #e74c3c;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Sign in to access your admin panel</p>
+        </div>
+
+        <div id="alertBox" class="alert"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                    autocomplete="email"
+                >
+                <div id="emailError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+                <div id="passwordError" class="error-message"></div>
+            </div>
+
+            <button type="submit" id="loginButton" class="login-button">
+                Sign In
+            </button>
+        </form>
+
+        <div class="form-footer">
+            <a href="/forgot-password">Forgot password?</a>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const alertBox = document.getElementById('alertBox');
+
+        // Get redirect URL from query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect') || '/modelexample/admin';
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear previous errors
+            clearErrors();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Basic validation
+            if (!email || !password) {
+                showAlert('Please enter both email and password', 'danger');
+                return;
+            }
+
+            // Disable button and show loading
+            loginButton.disabled = true;
+            loginButton.innerHTML = '<span class="spinner"></span> Signing In...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store tokens in localStorage
+                    localStorage.setItem('accessToken', data.token);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    if (data.sessionId) {
+                        localStorage.setItem('sessionId', data.sessionId);
+                    }
+
+                    // Also store access token in cookie for server-side middleware
+                    // Set cookie for 15 minutes (same as JWT expiry)
+                    document.cookie = `accessToken=${data.token}; path=/; max-age=${15 * 60}; SameSite=Strict`;
+
+                    // Show success message
+                    showAlert('Login successful! Redirecting...', 'success');
+
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 1000);
+
+                } else {
+                    // Handle errors
+                    if (data.message) {
+                        showAlert(data.message, 'danger');
+                    } else {
+                        showAlert('Login failed. Please check your credentials.', 'danger');
+                    }
+
+                    // Re-enable button
+                    loginButton.disabled = false;
+                    loginButton.innerHTML = 'Sign In';
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('Network error. Please try again.', 'danger');
+
+                // Re-enable button
+                loginButton.disabled = false;
+                loginButton.innerHTML = 'Sign In';
+            }
+        });
+
+        function showAlert(message, type) {
+            alertBox.className = `alert alert-${type} show`;
+            alertBox.textContent = message;
+        }
+
+        function clearErrors() {
+            alertBox.className = 'alert';
+            emailInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+        }
+
+        // Auto-focus email input
+        emailInput.focus();
+    </script>
+</body>
+</html>

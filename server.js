@@ -121,6 +121,9 @@ app.use(require('./middleware/responseEnvelope'));
 const { impersonationMiddleware } = require('./middleware/impersonation');
 app.use(impersonationMiddleware);
 
+// Session-based authentication middleware
+const { requireAuth, requireModelAccess, requireAdmin } = require('./middleware/sessionAuth');
+
 // Static files
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
@@ -367,7 +370,7 @@ async function safeCount(query, params = []) {
 }
 
 // System Admin Dashboard Route (Handlebars) - Comprehensive Business Manager
-app.get('/sysadmin', async (req, res) => {
+app.get('/sysadmin', requireAuth, requireAdmin, async (req, res) => {
     // Collect stats, but never fail the page render
     const totalClients = await safeCount('SELECT COUNT(*) AS c FROM models');
     const activeClients = await safeCount('SELECT COUNT(*) AS c FROM models WHERE status = "active"');
@@ -392,11 +395,47 @@ app.get('/sysadmin', async (req, res) => {
     });
 });
 
+// Login page route
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/login.html'));
+});
+
+// Logout route
+app.post('/logout', requireAuth, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const sessionId = req.body.sessionId;
+
+        // End analytics session if provided
+        if (sessionId) {
+            const analyticsService = require('./src/services/AnalyticsService');
+            await analyticsService.endSession(sessionId, 'logout');
+        }
+
+        // Revoke refresh tokens (optional - uncomment if you want to invalidate all sessions)
+        // const refreshTokenService = require('./src/services/RefreshTokenService');
+        // await refreshTokenService.revokeUserTokens(userId);
+
+        // Clear cookie
+        res.clearCookie('accessToken');
+
+        res.json({
+            message: 'Logged out successfully'
+        });
+
+    } catch (error) {
+        console.error('Logout error:', error);
+        res.status(500).json({
+            message: 'Logout completed with errors'
+        });
+    }
+});
+
 // Model Admin Dashboard Route - Individual model management
-app.get('/admin', async (req, res) => res.redirect('/modelexample/admin'));
+app.get('/admin', requireAuth, async (req, res) => res.redirect('/modelexample/admin'));
 
 // Canonical model admin dashboard
-app.get('/:slug/admin', async (req, res) => {
+app.get('/:slug/admin', requireAuth, requireModelAccess, async (req, res) => {
     try {
         const { slug } = req.params;
         const rows = await db.query(
@@ -547,6 +586,10 @@ app.use('/api/model-contact', require('./routes/api/model-contact'));
 // Universal Gallery Admin API
 app.use('/api/universal-gallery', require('./routes/api/universal-gallery'));
 app.use('/api/universal-gallery-profiles', require('./routes/api/gallery-profiles'));
+
+// Theme Management APIs
+app.use('/api/admin/themes', require('./routes/api/admin/themes'));
+app.use('/api/theme-custom', require('./routes/api/theme-custom'));
 
 // New Model Admin: Gallery Page Editor
 app.get('/:slug/admin/content/gallery', async (req, res) => {
@@ -2825,7 +2868,17 @@ app.get('/_debug/routes', (req, res) => {
 });
 
 // API Routes
+// Auth routes - Main authentication system
 app.use('/api/auth', require('./src/routes/auth'));
+app.use('/api/auth', require('./src/routes/auth-verification'));
+app.use('/api/auth', require('./src/routes/auth-password-reset'));
+app.use('/api/auth', require('./src/routes/auth-refresh'));
+app.use('/api/auth', require('./src/routes/auth-audit'));
+app.use('/api/auth', require('./src/routes/auth-mfa'));
+app.use('/api/auth', require('./src/routes/auth-oauth'));
+app.use('/api/auth', require('./src/routes/auth-onboarding'));
+app.use('/api/auth', require('./src/routes/auth-analytics'));
+app.use('/api/auth-appwrite', require('./src/routes/auth-appwrite'));
 app.use('/api/models', require('./src/routes/models'));
 // Deprecated legacy admin API surface — removed (use /api/sysadmin)
 // app.use('/api/admin', require('./src/routes/admin'));
@@ -2900,7 +2953,7 @@ try {
 try { app.use('/api/model-settings', require('./routes/api/model-settings')); } catch (e) {}
 try { app.use('/api/model-testimonials', require('./routes/api/model-testimonials')); } catch (e) {}
 try { app.use('/api/model-themes', require('./routes/api/model-themes')); } catch (e) {}
-try { app.use('/api/model-theme-settings', require('./routes/api/model-theme-settings')); } catch (e) {}
+try { app.use('/api/model-theme-settings', require('./routes/api/theme-settings')); } catch (e) {}
 try { app.use('/api/model-calendar', require('./routes/api/model-calendar')); } catch (e) {}
 try { app.use('/api/model-profile', require('./routes/api/model-profile')); } catch (e) {}
 try { app.use('/api/gallery-images', require('./routes/api/gallery-images')); } catch (e) {}
@@ -3678,11 +3731,20 @@ async function startServer() {
         // Test database connection
         console.log('🔍 Testing database connection...');
         const dbConnected = await testConnection();
-        
+
         if (!dbConnected) {
             console.warn('⚠️  Database connection failed, but server will still start');
         }
-        
+
+        // Start Email Queue Processor
+        console.log('📧 Starting Email Queue Processor...');
+        try {
+            const emailQueueProcessor = require('./src/services/EmailQueueProcessor');
+            emailQueueProcessor.start();
+        } catch (error) {
+            console.warn('⚠️  Email Queue Processor failed to start:', error.message);
+        }
+
         // Initialize Universal Gallery System
         console.log('🎨 Initializing Universal Gallery System...');
         try {

@@ -1,8 +1,8 @@
 <!-- FAQ Hero Section -->
-<section class="bg-basic-primary text-white py-16" data-aos="fade-in">
+<section class="bg-basic-primary text-inverse py-16" data-aos="fade-in">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 basic-heading">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-base">
                 Frequently Asked Questions
             </h1>
             <p class="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
@@ -14,10 +14,10 @@
 
 <!-- FAQ Categories -->
 {{#if faqCategories}}
-<section class="py-8 bg-gray-50">
+<section class="py-8 theme-bg-light">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-            <div class="inline-flex bg-white rounded-lg p-1 shadow-sm">
+            <div class="inline-flex theme-bg-tertiary rounded-lg p-1 shadow-sm">
                 <button class="faq-category-filter active px-6 py-2 rounded-md text-sm font-medium transition-colors" data-category="all">
                     All Questions
                 </button>
@@ -33,7 +33,7 @@
 {{/if}}
 
 <!-- FAQ Content -->
-<section class="py-16 bg-white">
+<section class="py-16 theme-bg-tertiary">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {{#if faqs}}
         <div class="space-y-4" id="faqContainer">
@@ -41,18 +41,18 @@
             <div class="faq-item basic-card" data-category="{{this.category}}" data-aos="fade-up" data-aos-delay="{{@index}}0">
                 <button class="faq-question w-full text-left p-6 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-basic-primary focus:ring-offset-2 rounded-lg"
                         onclick="toggleFaq({{@index}})">
-                    <h3 class="text-lg font-semibold text-gray-900 pr-4">{{this.question}}</h3>
+                    <h3 class="text-lg font-semibold text-base pr-4">{{this.question}}</h3>
                     <div class="faq-icon flex-shrink-0">
                         <i class="fas fa-plus text-basic-primary text-lg"></i>
                     </div>
                 </button>
                 <div class="faq-answer hidden px-6 pb-6">
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-subtle leading-relaxed">
                         {{{this.answer}}}
                     </div>
                     {{#if this.relatedLinks}}
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <p class="text-sm font-medium text-gray-900 mb-2">Related Information:</p>
+                    <div class="mt-4 pt-4 border-t theme-border-light">
+                        <p class="text-sm font-medium text-base mb-2">Related Information:</p>
                         <div class="space-y-1">
                             {{#each this.relatedLinks}}
                             <a href="{{this.url}}" class="text-basic-primary hover:underline text-sm block">
@@ -73,13 +73,13 @@
             <div class="faq-item basic-card" data-aos="fade-up">
                 <button class="faq-question w-full text-left p-6 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-basic-primary focus:ring-offset-2 rounded-lg"
                         onclick="toggleFaq(0)">
-                    <h3 class="text-lg font-semibold text-gray-900 pr-4">How do I book an appointment?</h3>
+                    <h3 class="text-lg font-semibold text-base pr-4">How do I book an appointment?</h3>
                     <div class="faq-icon flex-shrink-0">
                         <i class="fas fa-plus text-basic-primary text-lg"></i>
                     </div>
                 </button>
                 <div class="faq-answer hidden px-6 pb-6">
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-subtle leading-relaxed">
                         <p>You can book an appointment by contacting me through the contact form on my website, sending an email, or calling directly. I typically respond to all inquiries within 24 hours.</p>
                         <p class="mt-3">Please include your preferred date, time, and any specific requirements when reaching out.</p>
                     </div>
@@ -95,7 +95,7 @@
                     </div>
                 </button>
                 <div class="faq-answer hidden px-6 pb-6">
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-subtle leading-relaxed">
                         <p>My rates vary depending on the type and duration of service. Please visit my <a href="/{{modelSlug}}/rates" class="text-basic-primary hover:underline">rates page</a> for detailed pricing information.</p>
                         <p class="mt-3">I offer various packages and am happy to discuss custom arrangements that meet your specific needs.</p>
                     </div>
@@ -111,7 +111,7 @@
                     </div>
                 </button>
                 <div class="faq-answer hidden px-6 pb-6">
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-subtle leading-relaxed">
                         <p>I recommend booking at least 24-48 hours in advance to ensure availability. However, I understand that sometimes you may need more immediate arrangements.</p>
                         <p class="mt-3">Same-day bookings may be possible depending on my schedule. Feel free to reach out even on short notice.</p>
                     </div>
@@ -127,7 +127,7 @@
                     </div>
                 </button>
                 <div class="faq-answer hidden px-6 pb-6">
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-subtle leading-relaxed">
                         <p>I understand that plans can change. I ask for at least 4 hours notice for cancellations to avoid any fees.</p>
                         <p class="mt-3">Cancellations with less than 4 hours notice may be subject to a partial charge. Emergency situations are always handled with understanding and flexibility.</p>
                     </div>
@@ -143,7 +143,7 @@
                     </div>
                 </button>
                 <div class="faq-answer hidden px-6 pb-6">
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-subtle leading-relaxed">
                         <p>Yes, I do offer travel services within reasonable distances. Travel fees may apply depending on the location and distance.</p>
                         <p class="mt-3">Please discuss your location when booking so I can provide accurate pricing and confirm availability for your area.</p>
                     </div>
@@ -159,7 +159,7 @@
                     </div>
                 </button>
                 <div class="faq-answer hidden px-6 pb-6">
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-subtle leading-relaxed">
                         <p>Privacy and discretion are paramount in my services. All client information is kept strictly confidential, and I maintain the highest standards of professionalism.</p>
                         <p class="mt-3">I respect your privacy completely and expect the same in return. All arrangements and communications are handled with complete discretion.</p>
                     </div>
@@ -171,14 +171,14 @@
 </section>
 
 <!-- Still Have Questions -->
-<section class="py-16 bg-gray-50">
+<section class="py-16 theme-bg-light">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
         <div class="basic-card p-12">
             <div class="w-16 h-16 mx-auto mb-6 bg-basic-primary rounded-lg flex items-center justify-center">
-                <i class="fas fa-question-circle text-2xl text-white"></i>
+                <i class="fas fa-question-circle text-2xl text-inverse"></i>
             </div>
-            <h2 class="text-2xl font-bold mb-4 basic-heading">Still Have Questions?</h2>
-            <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold mb-4 text-base">Still Have Questions?</h2>
+            <p class="text-subtle mb-8 max-w-2xl mx-auto">
                 Don't see your question answered here? I'm happy to provide more information and answer any specific questions you may have.
             </p>
             <a href="/{{modelSlug}}/contact" class="basic-btn">
@@ -190,20 +190,20 @@
 </section>
 
 <!-- Call to Action -->
-<section class="py-16 bg-basic-primary text-white">
+<section class="py-16 bg-basic-primary text-inverse">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-        <h2 class="text-3xl font-bold mb-6 basic-heading">
+        <h2 class="text-3xl font-bold mb-6 text-base">
             Ready to Get Started?
         </h2>
         <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
             Now that you have your questions answered, let's discuss how I can help you.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/{{modelSlug}}/contact" class="basic-btn bg-white text-basic-primary hover:bg-gray-100">
+            <a href="/{{modelSlug}}/contact" class="basic-btn theme-bg-tertiary text-basic-primary hover:opacity-90">
                 <i class="fas fa-envelope mr-2"></i>
                 Get in Touch
             </a>
-            <a href="/{{modelSlug}}/rates" class="basic-btn-outline border-white text-white hover:bg-white hover:text-basic-primary">
+            <a href="/{{modelSlug}}/rates" class="basic-btn-outline border-white text-inverse hover:bg-white hover:text-basic-primary">
                 <i class="fas fa-list mr-2"></i>
                 View Services
             </a>
@@ -252,8 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const category = this.dataset.category;
             
             // Update active filter
-            categoryFilters.forEach(f => f.classList.remove('active', 'bg-basic-primary', 'text-white'));
-            this.classList.add('active', 'bg-basic-primary', 'text-white');
+            categoryFilters.forEach(f => f.classList.remove('active', 'bg-basic-primary', 'text-inverse'));
+            this.classList.add('active', 'bg-basic-primary', 'text-inverse');
             
             // Filter FAQ items
             faqItems.forEach(item => {

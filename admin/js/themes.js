@@ -431,15 +431,17 @@ class ThemesManager {
     async switchTheme(themeId) {
         const theme = this.themes.find(t => t.id === themeId);
         if (!theme) return;
-        
+
         if (!confirm(`Switch to ${theme.name} theme? This will change your site's appearance immediately.`)) {
             return;
         }
 
         try {
             showLoading(true);
-            
-            const response = await window.adminDashboard.apiRequest(`/api/admin/themes/${themeId}/apply`, {
+
+            const modelSlug = window.adminDashboard?.currentUser?.slug || window.location.pathname.split('/')[1];
+
+            const response = await window.adminDashboard.apiRequest(`/api/admin/themes/${themeId}/apply?model_slug=${modelSlug}`, {
                 method: 'POST'
             });
 

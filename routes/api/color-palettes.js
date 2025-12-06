@@ -291,13 +291,32 @@ router.get('/models/:id/colors', async (req, res) => {
 
         const model = modelData[0];
 
-        // Get all color tokens for the active palette
+        // Determine which palette to use:
+        // - If active_color_palette_id is NULL → use theme's default palette
+        // - Otherwise → use the specific custom palette
+        let paletteId = model.active_color_palette_id;
+        let paletteSource = 'custom';
+
+        if (!paletteId) {
+            // NULL means use theme default - get theme's default_palette_id
+            const themeInfo = await db.query(`
+                SELECT default_palette_id
+                FROM theme_sets
+                WHERE id = ?
+            `, [model.theme_set_id]);
+
+            paletteId = themeInfo[0]?.default_palette_id;
+            paletteSource = 'theme_default';
+            console.log(`🎨 Model ${model.id} has NULL palette, using theme ${model.theme_set_id} default palette ${paletteId}`);
+        }
+
+        // Get all color tokens for the determined palette
         const colorTokens = await db.query(`
             SELECT token_name, token_value, token_description
             FROM color_palette_values
             WHERE palette_id = ?
             ORDER BY token_name
-        `, [model.active_color_palette_id]);
+        `, [paletteId]);
 
         // Convert to key-value object for easier template usage
         const colors = {};
@@ -315,10 +334,11 @@ router.get('/models/:id/colors', async (req, res) => {
                 display_name: model.theme_display_name
             },
             palette: {
-                id: model.active_color_palette_id,
+                id: paletteId,
                 name: model.palette_name,
                 display_name: model.palette_display_name,
-                is_custom: isCustom
+                is_custom: isCustom,
+                source: paletteSource  // 'theme_default' or 'custom'
             },
             colors: colors,
             token_count: colorTokens.length
@@ -357,21 +377,21 @@ router.get('/models/:id/palettes', async (req, res) => {
                 created_at DESC
         `, [modelId]);
 
-        // Get preview colors for each palette (first 6 tokens for UI preview)
+        // Get preview colors for each palette (first 6 standard tokens for UI preview)
         const palettesWithColors = await Promise.all(palettes.map(async (palette) => {
             const previewColors = await db.query(`
                 SELECT token_name, token_value
                 FROM color_palette_values
                 WHERE palette_id = ?
-                  AND token_name IN ('primary', 'secondary', 'accent', 'bg', 'text', 'nav-bg')
-                ORDER BY 
+                  AND token_name IN ('primary', 'secondary', 'accent', 'background', 'text', 'success')
+                ORDER BY
                     CASE token_name
                         WHEN 'primary' THEN 1
                         WHEN 'secondary' THEN 2
                         WHEN 'accent' THEN 3
-                        WHEN 'bg' THEN 4
+                        WHEN 'background' THEN 4
                         WHEN 'text' THEN 5
-                        WHEN 'nav-bg' THEN 6
+                        WHEN 'success' THEN 6
                     END
             `, [palette.id]);
 
@@ -451,18 +471,19 @@ router.post('/models/:id/palettes/custom', async (req, res) => {
         const { name, color_edits } = req.body;
 
         if (!name || !color_edits || typeof color_edits !== 'object') {
-            return res.status(400).json({ 
-                error: 'name and color_edits object are required' 
+            return res.status(400).json({
+                error: 'name and color_edits object are required'
             });
         }
 
-        // Get model's current theme and palette info for cloning
+        // Get model's current theme info
         const modelData = await db.query(`
-            SELECT 
+            SELECT
                 m.theme_set_id,
-                m.active_color_palette_id,
-                m.slug
+                m.slug,
+                ts.default_palette_id
             FROM models m
+            LEFT JOIN theme_sets ts ON m.theme_set_id = ts.id
             WHERE m.id = ?
         `, [modelId]);
 
@@ -471,39 +492,39 @@ router.post('/models/:id/palettes/custom', async (req, res) => {
         }
 
         const model = modelData[0];
-        
-        // Create new custom palette
-        const customPaletteName = name || `custom-${model.slug}-palette`;
+
+        // Create new STANDALONE custom palette (theme_set_id = NULL makes it reusable across themes)
+        const customPaletteName = name.toLowerCase().replace(/\s+/g, '-');
         const paletteResult = await db.query(`
             INSERT INTO color_palettes (
-                name, 
+                name,
                 display_name,
                 description,
-                is_system_palette, 
-                created_by_model_id, 
+                is_system_palette,
+                created_by_model_id,
                 theme_set_id,
                 created_at,
                 updated_at
-            ) VALUES (?, ?, ?, 0, ?, ?, NOW(), NOW())
+            ) VALUES (?, ?, ?, 0, ?, NULL, NOW(), NOW())
         `, [
             customPaletteName,
             name,
             `Custom palette created by ${model.slug}`,
-            modelId,
-            model.theme_set_id
+            modelId
         ]);
 
         const newPaletteId = paletteResult.insertId;
 
-        // Clone all tokens from current palette
-        const currentTokens = await db.query(`
+        // Clone all tokens from the theme's default palette to ensure we have all 33 tokens
+        const defaultPaletteId = model.default_palette_id || 17; // Royal Gem default
+        const defaultTokens = await db.query(`
             SELECT token_name, token_value, token_description
             FROM color_palette_values
             WHERE palette_id = ?
-        `, [model.active_color_palette_id]);
+        `, [defaultPaletteId]);
 
-        // Insert cloned tokens with edits applied
-        const tokenInserts = currentTokens.map(token => {
+        // Insert all tokens with user's edits applied
+        const tokenInserts = defaultTokens.map(token => {
             const editedValue = color_edits[token.token_name] || token.token_value;
             return [
                 newPaletteId,
@@ -520,12 +541,7 @@ router.post('/models/:id/palettes/custom', async (req, res) => {
             `, tokenInserts.flat());
         }
 
-        // Update model to use new custom palette
-        await db.query(`
-            UPDATE models 
-            SET active_color_palette_id = ?
-            WHERE id = ?
-        `, [newPaletteId, modelId]);
+        console.log(`✅ Created custom palette ${newPaletteId} (${name}) for model ${modelId} with ${tokenInserts.length} tokens`);
 
         res.json({
             success: true,
@@ -541,7 +557,7 @@ router.post('/models/:id/palettes/custom', async (req, res) => {
 
     } catch (error) {
         console.error('Error creating custom palette:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error', message: error.message });
     }
 });
 
@@ -555,8 +571,8 @@ router.put('/palettes/:id/colors', async (req, res) => {
         const colorUpdates = req.body;
 
         if (!colorUpdates || typeof colorUpdates !== 'object') {
-            return res.status(400).json({ 
-                error: 'Color updates object is required' 
+            return res.status(400).json({
+                error: 'Color updates object is required'
             });
         }
 
@@ -568,23 +584,26 @@ router.put('/palettes/:id/colors', async (req, res) => {
         `, [paletteId]);
 
         if (!paletteCheck.length) {
-            return res.status(404).json({ 
-                error: 'Custom palette not found or cannot modify system palette' 
+            return res.status(404).json({
+                error: 'Custom palette not found or cannot modify system palette'
             });
         }
 
-        // Update each color token
+        // Update/insert each color token (UPSERT)
         const updates = Object.entries(colorUpdates);
         if (updates.length === 0) {
             return res.status(400).json({ error: 'No color updates provided' });
         }
 
         for (const [tokenName, tokenValue] of updates) {
+            // Use INSERT ... ON DUPLICATE KEY UPDATE to handle both new and existing tokens
             await db.query(`
-                UPDATE color_palette_values
-                SET token_value = ?, updated_at = NOW()
-                WHERE palette_id = ? AND token_name = ?
-            `, [tokenValue, paletteId, tokenName]);
+                INSERT INTO color_palette_values (palette_id, token_name, token_value, updated_at)
+                VALUES (?, ?, ?, NOW())
+                ON DUPLICATE KEY UPDATE
+                    token_value = VALUES(token_value),
+                    updated_at = NOW()
+            `, [paletteId, tokenName, tokenValue]);
         }
 
         // Update palette modified timestamp
@@ -594,6 +613,8 @@ router.put('/palettes/:id/colors', async (req, res) => {
             WHERE id = ?
         `, [paletteId]);
 
+        console.log(`✅ Updated ${updates.length} tokens for palette ${paletteId}`);
+
         res.json({
             success: true,
             message: 'Palette colors updated successfully',
@@ -602,7 +623,74 @@ router.put('/palettes/:id/colors', async (req, res) => {
 
     } catch (error) {
         console.error('Error updating palette colors:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error', message: error.message });
+    }
+});
+
+/**
+ * DELETE /api/color-palettes/palettes/:id
+ * Delete a custom palette (only if created by a model, not system palettes)
+ */
+router.delete('/palettes/:id', async (req, res) => {
+    try {
+        const paletteId = parseInt(req.params.id);
+
+        if (!paletteId || isNaN(paletteId)) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid palette ID'
+            });
+        }
+
+        // Verify this is a custom palette (not system palette)
+        const paletteCheck = await db.query(`
+            SELECT id, name, display_name, is_system_palette, created_by_model_id
+            FROM color_palettes
+            WHERE id = ? AND is_system_palette = 0
+        `, [paletteId]);
+
+        if (!paletteCheck.length) {
+            return res.status(404).json({
+                success: false,
+                error: 'Custom palette not found or cannot delete system palette'
+            });
+        }
+
+        const palette = paletteCheck[0];
+
+        // Delete all color tokens first (foreign key constraint)
+        await db.query(`
+            DELETE FROM color_palette_values
+            WHERE palette_id = ?
+        `, [paletteId]);
+
+        // Delete the palette
+        await db.query(`
+            DELETE FROM color_palettes
+            WHERE id = ?
+        `, [paletteId]);
+
+        // Check if any models are using this palette and reset them to NULL
+        await db.query(`
+            UPDATE models
+            SET active_color_palette_id = NULL
+            WHERE active_color_palette_id = ?
+        `, [paletteId]);
+
+        console.log(`✅ Deleted custom palette ${paletteId} (${palette.display_name}) and reset any models using it`);
+
+        res.json({
+            success: true,
+            message: `Palette "${palette.display_name}" deleted successfully`
+        });
+
+    } catch (error) {
+        console.error('Error deleting palette:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error',
+            message: error.message
+        });
     }
 });
 

@@ -4,7 +4,7 @@
         <div class="flex justify-between items-center h-16">
             <!-- Logo/Brand -->
             <div class="flex items-center">
-                <a href="/{{modelSlug}}{{previewParam}}" class="text-xl font-semibold text-white hover:text-gray-200 transition-colors">
+                <a href="/{{modelSlug}}{{previewParam}}" class="text-xl font-semibold transition-colors text-inverse">
                     {{siteName}}
                 </a>
             </div>
@@ -32,11 +32,14 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="bg-black bg-opacity-20" style="display: none;">
+    <div id="mobile-menu" class="rounded transition-colors" style="display: none; background-color: var(--primary-hover);">
         <div class="px-2 pt-2 pb-3 space-y-1">
             {{#each navigation}}
             <a href="{{this.url}}"
-               class="block px-3 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded transition-colors {{#if this.active}}bg-white bg-opacity-20{{/if}}">
+               class="block px-3 py-2 rounded transition-colors text-inverse {{#if this.active}}{{/if}}"
+               style="{{#if this.active}}background: color-mix(in srgb, var(--text-inverse) 25%, transparent 75%);{{/if}}"
+               onmouseover="this.style.background='color-mix(in srgb, var(--text-inverse) 15%, transparent 85%)'"
+               onmouseout="this.style.background='{{#if this.active}}color-mix(in srgb, var(--text-inverse) 25%, transparent 75%){{else}}transparent{{/if}}'">
                 {{this.name}}
             </a>
             {{/each}}

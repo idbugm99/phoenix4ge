@@ -8,18 +8,19 @@
 <!-- Basic Theme Gallery CSS Variables Override -->
 <style>
 :root {
-    --gallery-primary: #2563eb;
-    --gallery-primary-hover: #1d4ed8;
-    --gallery-secondary: #64748b;
-    --gallery-accent: #0ea5e9;
-    --gallery-background: #ffffff;
-    --gallery-surface: #f8fafc;
-    --gallery-text: #1e293b;
-    --gallery-text-muted: #64748b;
-    --gallery-border: #e2e8f0;
+    /* Use theme colors from database instead of hard-coded values */
+    --gallery-primary: var(--text-accent);
+    --gallery-primary-hover: var(--text-accent-hover);
+    --gallery-secondary: var(--text-subtle);
+    --gallery-accent: var(--text-accent);
+    --gallery-background: var(--theme-bg-primary);
+    --gallery-surface: var(--theme-bg-light);
+    --gallery-text: var(--text-base);
+    --gallery-text-muted: var(--text-subtle);
+    --gallery-border: var(--theme-border-light);
     --gallery-shadow: rgba(0, 0, 0, 0.1);
-    --gallery-shadow-hover: rgba(37, 99, 235, 0.15);
-    
+    --gallery-shadow-hover: rgba(0, 0, 0, 0.15);
+
     --gallery-border-radius: 8px;
     --gallery-border-radius-large: 12px;
     --gallery-grid-columns-desktop: 3;

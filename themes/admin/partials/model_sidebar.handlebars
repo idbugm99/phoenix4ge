@@ -69,8 +69,54 @@
         Profile & Settings
         <span class="badge bg-secondary">Soon</span>
       </a>
+      <a href="#" class="nav-link" onclick="handleLogout(event)">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+      </a>
     </div>
   </nav>
 </div>
+
+<script>
+// Logout functionality
+async function handleLogout(event) {
+    event.preventDefault();
+
+    if (confirm('Are you sure you want to logout?')) {
+        try {
+            // Get session ID for cleanup
+            const sessionId = localStorage.getItem('sessionId');
+            const accessToken = localStorage.getItem('accessToken');
+
+            // Call server logout endpoint
+            if (accessToken) {
+                await fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sessionId })
+                }).catch(err => console.log('Logout API error:', err));
+            }
+
+            // Clear tokens from localStorage
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('sessionId');
+
+            // Clear access token cookie
+            document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict';
+
+            // Redirect to login
+            window.location.href = '/login';
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Still redirect to login even if API call fails
+            window.location.href = '/login';
+        }
+    }
+}
+</script>
 
 

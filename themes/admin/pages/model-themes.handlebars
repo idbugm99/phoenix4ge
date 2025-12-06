@@ -5,9 +5,15 @@
 
 <!-- Current Active Theme Display -->
 <div class="alert alert-info mb-4" id="current-theme-display" style="display: none;">
-  <div class="d-flex align-items-center">
-    <i class="fas fa-bolt text-warning me-2"></i>
-    <span id="active-theme-text">Loading current theme...</span>
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <i class="fas fa-bolt text-warning me-2"></i>
+      <span id="active-theme-text">Loading current theme...</span>
+    </div>
+    <small class="text-muted">
+      <i class="fas fa-sync-alt me-1"></i>
+      After changing themes/palettes, refresh your main site to see changes
+    </small>
   </div>
 </div>
 
@@ -180,7 +186,8 @@ class ModelThemeManager {
       const m = location.pathname.match(/^\/([^\/]+)\/admin/);
       if (m) this.slug = m[1];
     }
-    
+
+    this.modelId = null;  // Will be loaded from API
     this.availableThemes = [];
     this.customPalettes = [];
     this.currentTheme = null;
@@ -194,7 +201,8 @@ class ModelThemeManager {
     this.currentPaletteColors = {};
     this.selectedPalette = null;
     this.appliedPalette = null; // Palette applied to current theme
-    
+    this.activePaletteId = null; // Currently active palette on live site (NULL = using theme default)
+
     this.init();
   }
   
@@ -264,38 +272,46 @@ class ModelThemeManager {
 
   async loadCustomPalettes() {
     try {
-      // For now, create some default palettes - this would come from API later
-      this.customPalettes = [
-        {
-          id: 1,
-          name: "Sunset Orange",
-          colors: {
-            primary: "#FF6B35",
-            secondary: "#FF8C42", 
-            accent: "#FFD23F",
-            background: "#FFFFFF",
-            text: "#2C3E50"
-          },
-          created_at: new Date(),
+      // Always fetch profile to get the latest active palette ID
+      const profileResponse = await fetch(`/api/model-profile/${this.slug}`);
+      if (profileResponse.ok) {
+        const profileData = await profileResponse.json();
+        console.log('🎨 Profile data received:', profileData);
+        this.modelId = profileData.data.id;
+        // Access active_color_palette_id directly from the raw query result
+        this.activePaletteId = profileData.data.active_color_palette_id || null;
+        console.log('🎨 Active palette ID:', this.activePaletteId === null ? 'NULL (using theme default)' : this.activePaletteId, 'Type:', typeof this.activePaletteId);
+      }
+
+      if (!this.modelId) {
+        throw new Error('Could not determine model ID');
+      }
+
+      // Load custom palettes from API
+      const response = await fetch(`/api/color-palettes/models/${this.modelId}/palettes`);
+
+      if (!response.ok) {
+        throw new Error('Failed to load palettes');
+      }
+
+      const data = await response.json();
+
+      // Show only palettes created by THIS model (not system palettes or other models' palettes)
+      const availablePalettes = data.palettes.filter(p => p.is_custom === true);
+
+      // Map API response to expected format
+      this.customPalettes = availablePalettes.map(palette => {
+        return {
+          id: palette.id,
+          name: palette.display_name || palette.name,
+          colors: palette.preview_colors || {},
+          created_at: palette.created_at ? new Date(palette.created_at) : new Date(),
           is_default: false
-        },
-        {
-          id: 2,
-          name: "Ocean Blue",
-          colors: {
-            primary: "#2E86AB",
-            secondary: "#A23B72",
-            accent: "#F18F01",
-            background: "#F8F9FA",
-            text: "#212529"
-          },
-          created_at: new Date(),
-          is_default: false
-        }
-      ];
-      
+        };
+      });
+
       this.renderCustomPalettes();
-      console.log('🌈 Loaded custom palettes:', this.customPalettes);
+      console.log('🌈 Loaded custom palettes from API:', this.customPalettes);
     } catch (error) {
       console.error('❌ Error loading custom palettes:', error);
       this.showError('Failed to load custom palettes');
@@ -305,11 +321,11 @@ class ModelThemeManager {
   renderCustomPalettes() {
     const container = document.getElementById('custom-palettes-grid');
     const loadingIndicator = document.getElementById('palettes-loading');
-    
+
     if (loadingIndicator) {
       loadingIndicator.style.display = 'none';
     }
-    
+
     if (!this.customPalettes.length) {
       container.innerHTML = `
         <div class="col-12 text-center py-4">
@@ -318,16 +334,24 @@ class ModelThemeManager {
         </div>`;
       return;
     }
-    
+
+    console.log('🎨 Rendering palettes. Active palette ID:', this.activePaletteId, 'Type:', typeof this.activePaletteId);
+    console.log('🎨 Available palettes:', this.customPalettes.map(p => ({ id: p.id, name: p.name, type: typeof p.id })));
+
     container.innerHTML = this.customPalettes.map(palette => {
+      const isActive = this.activePaletteId === palette.id;
+      console.log(`🎨 Checking palette ${palette.id} (${palette.name}): activePaletteId=${this.activePaletteId}, palette.id=${palette.id}, isActive=${isActive}`);
       return `
       <div class="col-md-6 col-lg-4">
-        <div class="palette-card ${this.selectedPalette === palette.id ? 'selected' : ''}" 
+        <div class="palette-card ${this.selectedPalette === palette.id ? 'selected' : ''}"
              data-palette-id="${palette.id}">
           <div class="palette-header p-3 pb-2">
             <div class="d-flex justify-content-between align-items-start">
-              <div>
-                <h6 class="mb-1 fw-bold">${palette.name}</h6>
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <h6 class="mb-0 fw-bold">${palette.name}</h6>
+                  ${isActive ? '<span class="badge bg-success text-white px-2 py-1" style="font-size: 0.65rem; animation: pulse 2s infinite;"><i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>LIVE</span>' : ''}
+                </div>
                 <small class="text-muted">${palette.is_default ? 'Default' : 'Custom'}</small>
               </div>
               <div class="btn-group btn-group-sm">
@@ -383,37 +407,93 @@ class ModelThemeManager {
     this.updatePalettePreview();
   }
 
-  editPalette(paletteId) {
+  async editPalette(paletteId) {
     const palette = this.customPalettes.find(p => p.id === paletteId);
     if (!palette) return;
-    
-    this.isEditingPalette = true;
-    this.editingPaletteId = paletteId;
-    this.currentPaletteColors = { ...palette.colors };
-    
-    document.getElementById('editor-title').textContent = 'Edit Palette';
-    document.getElementById('palette-name').value = palette.name;
-    this.showPaletteEditor();
-    this.renderPaletteColorControls();
-    this.updatePalettePreview();
+
+    try {
+      // Fetch full palette data with ALL 15 color tokens from API
+      const response = await fetch(`/api/color-palettes/${paletteId}`);
+      if (!response.ok) {
+        throw new Error('Failed to load palette details');
+      }
+
+      const data = await response.json();
+      const fullColors = data.data.colors || {};
+
+      console.log('📝 Editing palette:', paletteId, 'Loaded colors:', fullColors);
+
+      this.isEditingPalette = true;
+      this.editingPaletteId = paletteId;
+      this.currentPaletteColors = { ...fullColors };
+
+      document.getElementById('editor-title').textContent = 'Edit Palette';
+      document.getElementById('palette-name').value = palette.name;
+      this.showPaletteEditor();
+      this.renderPaletteColorControls();
+      this.updatePalettePreview();
+    } catch (error) {
+      console.error('❌ Error loading palette for editing:', error);
+      this.showError('Failed to load palette colors');
+    }
   }
 
-  selectPalette(paletteId) {
+  async selectPalette(paletteId) {
     console.log('🔄 Selecting palette with ID:', paletteId, 'Previous selected:', this.selectedPalette);
-    this.selectedPalette = paletteId;
-    this.renderCustomPalettes();
-    
+
     const palette = this.customPalettes.find(p => p.id === paletteId);
-    if (palette) {
-      console.log('🎨 Palette selected:', palette.name, 'Colors:', palette.colors);
-      console.log('✅ this.selectedPalette is now:', this.selectedPalette);
-      this.showSuccess(`Selected palette: ${palette.name}`);
-      
-      // Show save-and-apply option if a theme is selected
-      const saveApplyBtn = document.getElementById('save-and-apply-palette');
-      if (this.currentTheme && saveApplyBtn) {
-        saveApplyBtn.style.display = 'block';
+    if (!palette) {
+      this.showError('Palette not found');
+      return;
+    }
+
+    // Save to database: Update model's active_color_palette_id
+    const modelSlug = window.location.pathname.split('/')[1];
+    try {
+      const response = await fetch(`/api/model-profile/${modelSlug}/apply-palette`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ palette_id: paletteId })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('💾 Palette applied to model:', result);
+
+        this.selectedPalette = paletteId;
+        this.activePaletteId = paletteId; // Update active palette to show LIVE badge
+        this.renderCustomPalettes();
+
+        console.log('🎨 Palette selected:', palette.name, 'Colors:', palette.colors);
+        console.log('✅ this.selectedPalette is now:', this.selectedPalette);
+        console.log('✅ this.activePaletteId is now:', this.activePaletteId);
+
+        this.showSuccess(`Applied palette: ${palette.name}! Reloading...`);
+
+        // Reload both admin page and parent/opener window if accessible
+        setTimeout(() => {
+          // Try to reload parent window (if admin is in iframe/popup)
+          try {
+            if (window.opener && !window.opener.closed) {
+              window.opener.location.reload();
+            }
+            if (window.parent && window.parent !== window) {
+              window.parent.location.reload();
+            }
+          } catch (e) {
+            console.log('Could not reload parent/opener:', e.message);
+          }
+
+          // Reload this admin page
+          window.location.reload();
+        }, 1000);
+      } else {
+        const error = await response.json();
+        this.showError(error.message || 'Failed to apply palette');
       }
+    } catch (error) {
+      console.error('Error applying palette:', error);
+      this.showError('Error applying palette: ' + error.message);
     }
   }
 
@@ -451,26 +531,116 @@ class ModelThemeManager {
 
   renderPaletteColorControls() {
     const container = document.getElementById('palette-color-controls');
-    const colorProperties = ['primary', 'secondary', 'accent', 'background', 'text'];
-    
-    container.innerHTML = colorProperties.map(property => {
-      const currentValue = this.currentPaletteColors[property] || '#000000';
-      
+
+    // 15 Standard Color Tokens for Royal Gem Theme
+    const colorGroups = [
+      {
+        title: '🎨 Core Brand Colors',
+        description: 'Essential brand colors',
+        expanded: true,
+        colors: [
+          { key: 'primary', label: 'Primary', desc: 'Main brand color' },
+          { key: 'secondary', label: 'Secondary', desc: 'Supporting brand color' },
+          { key: 'accent', label: 'Accent', desc: 'Highlight/accent color' }
+        ]
+      },
+      {
+        title: '🖼️ Backgrounds & Surfaces',
+        description: 'Background and surface colors',
+        expanded: false,
+        colors: [
+          { key: 'bg', label: 'Background', desc: 'Main background color' },
+          { key: 'bg-alt', label: 'BG Alt', desc: 'Alternative background' },
+          { key: 'surface', label: 'Surface', desc: 'Card/panel surface color' }
+        ]
+      },
+      {
+        title: '📝 Text Colors',
+        description: 'Text color variations',
+        expanded: false,
+        colors: [
+          { key: 'text', label: 'Text', desc: 'Primary text color' },
+          { key: 'text-subtle', label: 'Text Subtle', desc: 'Muted/subtle text' }
+        ]
+      },
+      {
+        title: '🎯 Borders',
+        description: 'Border colors',
+        expanded: false,
+        colors: [
+          { key: 'border', label: 'Border', desc: 'Default border color' },
+          { key: 'border-muted', label: 'Border Muted', desc: 'Subtle border color' }
+        ]
+      },
+      {
+        title: '🔍 Overlay & Focus',
+        description: 'Overlay and focus states',
+        expanded: false,
+        colors: [
+          { key: 'overlay', label: 'Overlay', desc: 'Modal/dialog overlay (rgba)' },
+          { key: 'focus', label: 'Focus', desc: 'Focus indicator color' }
+        ]
+      },
+      {
+        title: '⚡ Status Colors',
+        description: 'Status and feedback colors',
+        expanded: false,
+        colors: [
+          { key: 'success', label: 'Success', desc: 'Success states' },
+          { key: 'warning', label: 'Warning', desc: 'Warning states' },
+          { key: 'danger', label: 'Danger', desc: 'Error/danger states' }
+        ]
+      }
+    ];
+
+    const renderColorInput = (colorKey, label, desc) => {
+      const currentValue = this.currentPaletteColors[colorKey] || '';
+      const hasValue = currentValue !== '';
+
       return `
-      <div class="col-md-6 col-lg-4">
+      <div class="col-md-6 mb-3">
         <div class="color-control">
-          <label class="form-label fw-bold text-capitalize">${property} Color</label>
-          <div class="input-group">
-            <input type="color" 
-                   class="form-control form-control-color" 
-                   id="palette-color-${property}"
+          <label class="form-label fw-bold d-flex justify-content-between align-items-center">
+            <span>${label}</span>
+            ${hasValue ? '<span class="badge bg-success" style="font-size: 0.65rem;">SET</span>' : '<span class="badge bg-secondary" style="font-size: 0.65rem;">DEFAULT</span>'}
+          </label>
+          <small class="text-muted d-block mb-1">${desc}</small>
+          <div class="input-group input-group-sm">
+            <input type="color"
+                   class="form-control form-control-color"
+                   id="palette-color-${colorKey}"
+                   value="${currentValue || '#000000'}"
+                   onchange="themeManager.updatePaletteColor('${colorKey}', this.value)">
+            <input type="text"
+                   class="form-control"
+                   id="palette-text-${colorKey}"
                    value="${currentValue}"
-                   onchange="themeManager.updatePaletteColor('${property}', this.value)">
-            <input type="text" 
-                   class="form-control" 
-                   id="palette-text-${property}"
-                   value="${currentValue}"
-                   onchange="themeManager.updatePaletteColorFromText('${property}', this.value)">
+                   placeholder="Use default"
+                   onchange="themeManager.updatePaletteColorFromText('${colorKey}', this.value)">
+            ${hasValue ? `<button class="btn btn-outline-secondary" onclick="themeManager.clearPaletteColor('${colorKey}')" title="Clear (use default)"><i class="fas fa-times"></i></button>` : ''}
+          </div>
+        </div>
+      </div>`;
+    };
+
+    container.innerHTML = colorGroups.map((group, groupIndex) => {
+      const collapseId = `colorGroup${groupIndex}`;
+
+      return `
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded"
+             style="cursor: pointer;"
+             data-bs-toggle="collapse"
+             data-bs-target="#${collapseId}">
+          <div>
+            <strong>${group.title}</strong>
+            <small class="text-muted d-block">${group.description}</small>
+          </div>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="collapse ${group.expanded ? 'show' : ''}" id="${collapseId}">
+          <div class="row p-3 pt-2">
+            ${group.colors.map(color => renderColorInput(color.key, color.label, color.desc)).join('')}
           </div>
         </div>
       </div>`;
@@ -480,24 +650,38 @@ class ModelThemeManager {
   updatePaletteColor(property, value) {
     this.currentPaletteColors[property] = value;
     this.updatePalettePreview();
-    
+
     // Update the text input too
     const textInput = document.getElementById(`palette-text-${property}`);
     if (textInput) textInput.value = value;
   }
 
   updatePaletteColorFromText(property, value) {
+    // Allow empty value to clear the color
+    if (!value || value.trim() === '') {
+      this.clearPaletteColor(property);
+      return;
+    }
+
     if (!/^#[0-9A-F]{6}$/i.test(value)) {
       this.showError('Invalid hex color format. Use #RRGGBB format.');
       return;
     }
-    
+
     this.currentPaletteColors[property] = value;
     this.updatePalettePreview();
-    
+
     // Update the color input too
     const colorInput = document.getElementById(`palette-color-${property}`);
     if (colorInput) colorInput.value = value;
+  }
+
+  clearPaletteColor(property) {
+    delete this.currentPaletteColors[property];
+    this.updatePalettePreview();
+
+    // Re-render to update the UI
+    this.renderPaletteColorControls();
   }
 
   updatePalettePreview() {
@@ -526,65 +710,95 @@ class ModelThemeManager {
       this.showError('Please enter a palette name');
       return;
     }
-    
+
     try {
-      const paletteData = {
-        name: name,
-        colors: { ...this.currentPaletteColors }
-      };
-      
       if (this.editingPaletteId) {
         // Update existing palette
-        const paletteIndex = this.customPalettes.findIndex(p => p.id === this.editingPaletteId);
-        if (paletteIndex !== -1) {
-          this.customPalettes[paletteIndex] = {
-            ...this.customPalettes[paletteIndex],
-            name: name,
-            colors: { ...this.currentPaletteColors }
-          };
-          this.showSuccess(`Palette "${name}" updated successfully!`);
+        console.log('📝 Updating existing palette:', this.editingPaletteId);
+
+        const response = await fetch(`/api/color-palettes/palettes/${this.editingPaletteId}/colors`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.currentPaletteColors)
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to update palette');
         }
+
+        const result = await response.json();
+        console.log('✅ Palette updated:', result);
+        this.showSuccess(`Palette "${name}" updated successfully!`);
+
       } else {
         // Create new palette
-        const newPalette = {
-          id: Date.now(), // Simple ID generation for demo
-          name: name,
-          colors: { ...this.currentPaletteColors },
-          created_at: new Date(),
-          is_default: false
-        };
-        this.customPalettes.push(newPalette);
+        console.log('✨ Creating new palette:', name);
+
+        const response = await fetch(`/api/color-palettes/models/${this.modelId}/palettes/custom`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            color_edits: this.currentPaletteColors
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to create palette');
+        }
+
+        const result = await response.json();
+        console.log('✅ Palette created:', result);
         this.showSuccess(`Palette "${name}" created successfully!`);
       }
-      
-      this.renderCustomPalettes();
+
+      // Reload palettes from database
+      await this.loadCustomPalettes();
       this.hidePaletteEditor();
-      
+
     } catch (error) {
       console.error('❌ Error saving palette:', error);
-      this.showError('Failed to save palette');
+      this.showError(error.message || 'Failed to save palette');
     }
   }
 
   async deletePalette(paletteId) {
     const palette = this.customPalettes.find(p => p.id === paletteId);
     if (!palette || palette.is_default) return;
-    
+
     if (!confirm(`Delete palette "${palette.name}"? This action cannot be undone.`)) {
       return;
     }
-    
+
     try {
-      this.customPalettes = this.customPalettes.filter(p => p.id !== paletteId);
-      this.renderCustomPalettes();
-      this.showSuccess(`Palette "${palette.name}" deleted`);
-      
-      if (this.selectedPalette === paletteId) {
-        this.selectedPalette = null;
+      console.log('🗑️ Deleting palette:', paletteId);
+
+      const response = await fetch(`/api/color-palettes/palettes/${paletteId}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to delete palette');
       }
+
+      const result = await response.json();
+      console.log('✅ Palette deleted:', result);
+      this.showSuccess(result.message || `Palette "${palette.name}" deleted`);
+
+      // Reset active palette if this was the active one
+      if (this.activePaletteId === paletteId) {
+        this.activePaletteId = null;
+      }
+
+      // Reload palettes from database
+      await this.loadCustomPalettes();
+
     } catch (error) {
       console.error('❌ Error deleting palette:', error);
-      this.showError('Failed to delete palette');
+      this.showError(error.message || 'Failed to delete palette');
     }
   }
   
@@ -634,34 +848,79 @@ class ModelThemeManager {
     }).join('');
   }
 
-  selectTheme(themeId) {
+  async selectTheme(themeId) {
     console.log('🎨 Selecting theme:', themeId);
-    
+
     // Remove previous selection
     document.querySelectorAll('.theme-card').forEach(card => {
       card.classList.remove('selected');
     });
-    
+
     // Add selection to clicked theme
     const themeCard = document.querySelector(`[data-theme-id="${themeId}"]`);
     if (themeCard) {
       themeCard.classList.add('selected');
     }
-    
+
     // Find the selected theme
     const selectedTheme = this.availableThemes.find(t => t.id == themeId);
     if (selectedTheme) {
       this.currentTheme = themeId;
-      
-      // Show save-and-apply option if a palette is selected  
+
+      // Save theme to database
+      const modelSlug = window.location.pathname.split('/')[1];
+      try {
+        const response = await fetch(`/api/admin/themes/${themeId}/apply?model_slug=${modelSlug}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('💾 Theme saved to database:', result);
+
+          // Show success message
+          this.showSuccess(result.message || 'Theme applied successfully! Reloading...');
+
+          // Reload both admin page and parent/opener window to show new theme colors
+          setTimeout(() => {
+            // Try to reload parent window (if admin is in iframe/popup)
+            try {
+              if (window.opener && !window.opener.closed) {
+                window.opener.location.reload();
+              }
+              if (window.parent && window.parent !== window) {
+                window.parent.location.reload();
+              }
+            } catch (e) {
+              console.log('Could not reload parent/opener:', e.message);
+            }
+
+            // Reload this admin page
+            window.location.reload();
+          }, 1000);
+
+          return; // Don't show color editor, page will reload
+        } else {
+          console.error('Failed to save theme:', await response.text());
+          this.showError('Failed to apply theme. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error saving theme:', error);
+        this.showError('Error applying theme: ' + error.message);
+      }
+
+      // Show save-and-apply option if a palette is selected
       const saveApplyBtn = document.getElementById('save-and-apply-palette');
       if (this.selectedPalette && saveApplyBtn) {
         saveApplyBtn.style.display = 'block';
       }
-      
+
       // Show theme color editor
       this.showThemeColorEditor(selectedTheme);
-      
+
       console.log('✅ Theme selected:', selectedTheme.display_name || selectedTheme.name);
       this.showSuccess(`Selected theme: ${selectedTheme.display_name || selectedTheme.name}`);
     }
@@ -1465,13 +1724,22 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 @keyframes activePulse {
-  0%, 100% { 
+  0%, 100% {
     transform: scale(1);
     box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  50% { 
+  50% {
     transform: scale(1.05);
     box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6), 0 3px 6px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
   }
 }
 

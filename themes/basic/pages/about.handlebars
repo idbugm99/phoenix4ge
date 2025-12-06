@@ -1,87 +1,87 @@
 <!-- About Main Content -->
-<section class="py-20 bg-gray-50 text-gray-800 relative">
+<section class="py-20 theme-bg-light text-base relative">
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid md:grid-cols-2 gap-16 items-start">
             <!-- Left Column: Main Content -->
             <div class="space-y-12">
                 {{#if about_content.page_title_visible}}
-                <h1 class="text-4xl font-bold mb-8 text-blue-600 leading-tight" data-aos="fade-down">
+                <h1 class="text-4xl font-bold mb-8 text-base leading-tight" data-aos="fade-down">
                     {{#if about_content.page_title}}{{about_content.page_title}}{{else}}About {{siteName}}{{/if}}
                 </h1>
                 {{#if about_content.page_subtitle}}
-                <p class="text-xl text-gray-700 max-w-3xl mx-auto text-center mb-8">{{about_content.page_subtitle}}</p>
+                <p class="text-xl text-subtle max-w-3xl mx-auto text-center mb-8">{{about_content.page_subtitle}}</p>
                 {{/if}}
                 {{/if}}
-                
+
                 {{#if about_content.main_content_visible}}
-                <div class="space-y-6 text-lg text-gray-800 leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                <div class="space-y-6 text-lg text-base leading-relaxed" data-aos="fade-up" data-aos-delay="200">
                     {{#if about_content.main_paragraph_1}}
-                    <p class="text-xl text-gray-800">{{about_content.main_paragraph_1}}</p>
+                    <p class="text-xl text-subtle">{{about_content.main_paragraph_1}}</p>
                     {{/if}}
-                    
+
                     {{#if about_content.main_paragraph_2}}
-                    <p class="text-gray-700">{{about_content.main_paragraph_2}}</p>
+                    <p class="text-subtle">{{about_content.main_paragraph_2}}</p>
                     {{/if}}
-                    
+
                     {{#if about_content.main_paragraph_3}}
-                    <p class="text-gray-700">{{about_content.main_paragraph_3}}</p>
+                    <p class="text-subtle">{{about_content.main_paragraph_3}}</p>
                     {{/if}}
-                    
+
                     {{#if about_content.main_paragraph_4}}
-                    <p class="text-gray-700">{{about_content.main_paragraph_4}}</p>
+                    <p class="text-subtle">{{about_content.main_paragraph_4}}</p>
                     {{/if}}
-                    
+
                     {{#unless about_content.main_paragraph_1}}
-                    <p class="text-xl text-gray-800">Welcome to my world of elegance and sophistication. I am a professional companion who values discretion, intelligence, and genuine connection.</p>
-                    <p class="text-gray-700">With years of experience in providing exceptional companionship services, I pride myself on creating memorable experiences tailored to each client's unique needs.</p>
+                    <p class="text-xl text-subtle">Welcome to my world of elegance and sophistication. I am a professional companion who values discretion, intelligence, and genuine connection.</p>
+                    <p class="text-subtle">With years of experience in providing exceptional companionship services, I pride myself on creating memorable experiences tailored to each client's unique needs.</p>
                     {{/unless}}
                 </div>
                 {{/if}}
                 
                 {{#if about_content.services_visible}}
                 <div class="mt-12" data-aos="fade-up" data-aos-delay="400">
-                    <h2 class="text-3xl font-bold mb-6 text-blue-600">
+                    <h2 class="text-3xl font-bold mb-6 text-base">
                         {{#if about_content.services_title}}{{about_content.services_title}}{{else}}My Services{{/if}}
                     </h2>
-                    <ul class="space-y-3 text-gray-800">
+                    <ul class="space-y-3 text-subtle">
                         {{#if about_content.service_1}}
                         <li class="flex items-start">
-                            <svg class="w-3 h-3 text-blue-600 mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
+                            <svg class="w-3 h-3 text-accent mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
                                 <path d="M4 0L5.09 2.55L8 2.55L5.82 4.27L6.91 6.82L4 5.1L1.09 6.82L2.18 4.27L0 2.55L2.91 2.55L4 0Z"/>
                             </svg>
-                            <span class="text-lg text-gray-800">{{about_content.service_1}}</span>
+                            <span class="text-lg text-subtle">{{about_content.service_1}}</span>
                         </li>
                         {{/if}}
                         {{#if about_content.service_2}}
                         <li class="flex items-start">
-                            <svg class="w-3 h-3 text-blue-600 mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
+                            <svg class="w-3 h-3 text-accent mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
                                 <path d="M4 0L5.09 2.55L8 2.55L5.82 4.27L6.91 6.82L4 5.1L1.09 6.82L2.18 4.27L0 2.55L2.91 2.55L4 0Z"/>
                             </svg>
-                            <span class="text-lg text-gray-800">{{about_content.service_2}}</span>
+                            <span class="text-lg text-subtle">{{about_content.service_2}}</span>
                         </li>
                         {{/if}}
                         {{#if about_content.service_3}}
                         <li class="flex items-start">
-                            <svg class="w-3 h-3 text-blue-600 mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
+                            <svg class="w-3 h-3 text-accent mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
                                 <path d="M4 0L5.09 2.55L8 2.55L5.82 4.27L6.91 6.82L4 5.1L1.09 6.82L2.18 4.27L0 2.55L2.91 2.55L4 0Z"/>
                             </svg>
-                            <span class="text-lg text-gray-800">{{about_content.service_3}}</span>
+                            <span class="text-lg text-subtle">{{about_content.service_3}}</span>
                         </li>
                         {{/if}}
                         {{#if about_content.service_4}}
                         <li class="flex items-start">
-                            <svg class="w-3 h-3 text-blue-600 mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
+                            <svg class="w-3 h-3 text-accent mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
                                 <path d="M4 0L5.09 2.55L8 2.55L5.82 4.27L6.91 6.82L4 5.1L1.09 6.82L2.18 4.27L0 2.55L2.91 2.55L4 0Z"/>
                             </svg>
-                            <span class="text-lg text-gray-800">{{about_content.service_4}}</span>
+                            <span class="text-lg text-subtle">{{about_content.service_4}}</span>
                         </li>
                         {{/if}}
                         {{#if about_content.service_5}}
                         <li class="flex items-start">
-                            <svg class="w-3 h-3 text-blue-600 mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
+                            <svg class="w-3 h-3 text-accent mr-2 mt-2 flex-shrink-0" fill="currentColor" viewBox="0 0 8 8">
                                 <path d="M4 0L5.09 2.55L8 2.55L5.82 4.27L6.91 6.82L4 5.1L1.09 6.82L2.18 4.27L0 2.55L2.91 2.55L4 0Z"/>
                             </svg>
-                            <span class="text-lg text-gray-800">{{about_content.service_5}}</span>
+                            <span class="text-lg text-subtle">{{about_content.service_5}}</span>
                         </li>
                         {{/if}}
                     </ul>
@@ -91,10 +91,10 @@
                 {{#if about_content.interests_visible}}
                 {{#if about_content.interests}}
                 <div class="mt-12" data-aos="fade-up" data-aos-delay="600">
-                    <h2 class="text-3xl font-bold mb-6 text-blue-600">{{#if about_content.interests_title}}{{about_content.interests_title}}{{else}}My Interests{{/if}}</h2>
+                    <h2 class="text-3xl font-bold mb-6 text-base">{{#if about_content.interests_title}}{{about_content.interests_title}}{{else}}My Interests{{/if}}</h2>
                     <div class="flex flex-wrap gap-2">
                         {{#each (split about_content.interests ',')}}
-                        <span class="bg-blue-600 text-white px-3 py-2 text-sm font-medium hover:bg-blue-700 transition-colors duration-200" style="border-radius: 9999px; line-height: 18px;">{{trim this}}</span>
+                        <span class="text-accent-bg text-inverse px-3 py-2 text-sm font-medium transition-colors duration-200" style="border-radius: 9999px; line-height: 18px; opacity: 1;">{{trim this}}</span>
                         {{/each}}
                     </div>
                 </div>
@@ -106,7 +106,7 @@
             <div class="space-y-10">
                 <!-- Portrait Image -->
                 {{#if about_content.portrait_visible}}
-                <div class="overflow-hidden bg-white aspect-[4/3] max-h-80 cursor-pointer group" 
+                <div class="overflow-hidden theme-bg-tertiary aspect-[4/3] max-h-80 cursor-pointer group" 
                      style="border-radius: 16px; border: 1px solid #E5E7EB;"
                      data-aos="zoom-in" data-aos-delay="300"
                      onclick="openPortraitPreview('{{about_content.portraitImageUrl}}', '{{#if about_content.portrait_alt}}{{about_content.portrait_alt}}{{else}}Professional Portrait{{/if}}')")>
@@ -117,29 +117,29 @@
                     
                     <!-- Click to preview overlay -->
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                        <div class="bg-white bg-opacity-90 rounded-full p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="theme-bg-tertiary bg-opacity-90 rounded-full p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
                             </svg>
                         </div>
                     </div>
-                    
+
                     <!-- Click hint text -->
-                    <div class="absolute bottom-2 left-2 bg-white bg-opacity-95 rounded px-2 py-1 text-xs text-gray-800 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div class="absolute bottom-2 left-2 theme-bg-tertiary bg-opacity-95 rounded px-2 py-1 text-xs text-base font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         Click to preview
                     </div>
                 </div>
                 {{else}}
-                <div class="overflow-hidden bg-white aspect-[4/3] max-h-80 flex items-center justify-center" 
-                     style="border-radius: 16px; border: 1px solid #E5E7EB;" 
+                <div class="overflow-hidden theme-bg-tertiary aspect-[4/3] max-h-80 flex items-center justify-center"
+                     style="border-radius: 16px; border: 1px solid #E5E7EB;"
                      data-aos="zoom-in" data-aos-delay="300">
                     <div class="text-center p-8">
-                        <div class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-blue-600 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                        <div class="w-24 h-24 mx-auto mb-4 rounded-full border-2 text-accent-border flex items-center justify-center">
+                            <svg class="w-12 h-12 text-accent" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                             </svg>
                         </div>
-                        <p class="text-gray-600 text-lg">Professional portrait coming soon</p>
+                        <p class="text-subtle text-lg">Professional portrait coming soon</p>
                     </div>
                 </div>
                 {{/if}}
@@ -147,18 +147,18 @@
                 <!-- Quick Facts -->
                 {{#if about_content.quick_facts_visible}}
                 {{#if about_content.quickFacts}}
-                <div class="bg-white border border-blue-200 p-8 rounded-2xl shadow-lg" data-aos="zoom-in" data-aos-delay="500">
-                    <p class="text-gray-600 text-xs uppercase tracking-widest mb-2">Personal Details</p>
-                    <h3 class="text-2xl font-bold mb-6 text-blue-600">{{#if about_content.quick_facts_title}}{{about_content.quick_facts_title}}{{else}}Quick Facts{{/if}}</h3>
+                <div class="theme-bg-tertiary theme-border-light p-8 rounded-2xl shadow-lg" data-aos="zoom-in" data-aos-delay="500" style="border: 1px solid var(--theme-border-light);">
+                    <p class="text-subtle text-xs uppercase tracking-widest mb-2">Personal Details</p>
+                    <h3 class="text-2xl font-bold mb-6 text-accent">{{#if about_content.quick_facts_title}}{{about_content.quick_facts_title}}{{else}}Quick Facts{{/if}}</h3>
                     <div class="space-y-0">
                         {{#each about_content.quickFacts}}
                         <div class="flex items-center py-4">
-                            <svg class="w-6 h-6 text-blue-600 mr-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-6 h-6 text-accent mr-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                             </svg>
                             <div class="flex-1 min-w-0">
-                                <div class="text-xs uppercase tracking-wider text-gray-600 font-medium mb-1">{{this.question}}</div>
-                                <div class="text-base font-medium text-gray-900">{{this.answer}}</div>
+                                <div class="text-xs uppercase tracking-wider text-subtle font-medium mb-1">{{this.question}}</div>
+                                <div class="text-base font-medium text-base">{{this.answer}}</div>
                             </div>
                         </div>
                         {{/each}}
@@ -169,20 +169,20 @@
                 
                 <!-- CTA Section -->
                 {{#if about_content.about_cta_visible}}
-                <div class="bg-white border border-blue-200 p-8 rounded-2xl" data-aos="zoom-in" data-aos-delay="700">
-                    <p class="text-gray-600 text-xs uppercase tracking-widest mb-2">Ready to Begin</p>
-                    <h3 class="text-2xl font-bold mb-4 text-blue-600">{{#if about_content.cta_title}}{{about_content.cta_title}}{{else}}Ready to Connect?{{/if}}</h3>
-                    <p class="mb-6 text-gray-700 text-lg leading-relaxed">{{#if about_content.cta_description}}{{about_content.cta_description}}{{else}}I would love to hear from you and discuss how we can create an unforgettable experience together.{{/if}}</p>
+                <div class="theme-bg-tertiary theme-border-light p-8 rounded-2xl" data-aos="zoom-in" data-aos-delay="700" style="border: 1px solid var(--theme-border-light);">
+                    <p class="text-subtle text-xs uppercase tracking-widest mb-2">Ready to Begin</p>
+                    <h3 class="text-2xl font-bold mb-4 text-base">{{#if about_content.cta_title}}{{about_content.cta_title}}{{else}}Ready to Connect?{{/if}}</h3>
+                    <p class="mb-6 text-subtle text-lg leading-relaxed">{{#if about_content.cta_description}}{{about_content.cta_description}}{{else}}I would love to hear from you and discuss how we can create an unforgettable experience together.{{/if}}</p>
                     <div class="space-y-3 md:space-y-0 md:space-x-3 md:flex">
                         {{#if about_content.cta_button_1_text}}
-                        <a href="/{{modelSlug}}/{{#if about_content.cta_button_1_link}}{{about_content.cta_button_1_link}}{{else}}calendar{{/if}}{{previewParam}}" 
-                           class="block md:flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg text-center font-semibold hover:bg-blue-700 transition-colors duration-200">
+                        <a href="/{{modelSlug}}/{{#if about_content.cta_button_1_link}}{{about_content.cta_button_1_link}}{{else}}calendar{{/if}}{{previewParam}}"
+                           class="block md:flex-1 text-accent-bg text-inverse px-6 py-3 rounded-lg text-center font-semibold transition-colors duration-200" style="background-color: var(--text-accent);">
                            {{about_content.cta_button_1_text}}
                         </a>
                         {{/if}}
                         {{#if about_content.cta_button_2_text}}
-                        <a href="/{{modelSlug}}/{{#if about_content.cta_button_2_link}}{{about_content.cta_button_2_link}}{{else}}contact{{/if}}{{previewParam}}" 
-                           class="block md:flex-1 border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg text-center font-semibold hover:bg-blue-600 hover:text-white transition-colors duration-200">
+                        <a href="/{{modelSlug}}/{{#if about_content.cta_button_2_link}}{{about_content.cta_button_2_link}}{{else}}contact{{/if}}{{previewParam}}"
+                           class="block md:flex-1 text-accent-border text-accent px-6 py-3 rounded-lg text-center font-semibold transition-colors duration-200" style="border: 2px solid var(--text-accent);">
                            {{about_content.cta_button_2_text}}
                         </a>
                         {{/if}}
@@ -199,7 +199,7 @@
     <div class="relative max-w-4xl max-h-full">
         <!-- Close button -->
         <button onclick="closePortraitPreview()" 
-                class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors duration-200 z-10">
+                class="absolute -top-12 right-0 text-inverse hover:text-gray-300 transition-colors duration-200 z-10">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
@@ -214,7 +214,7 @@
         </div>
         
         <!-- Image caption -->
-        <div class="absolute bottom-4 left-4 right-4 bg-black bg-opacity-75 text-white p-3 rounded-lg">
+        <div class="absolute bottom-4 left-4 right-4 bg-black bg-opacity-75 text-inverse p-3 rounded-lg">
             <p id="portrait-preview-caption" class="text-center text-sm"></p>
         </div>
     </div>

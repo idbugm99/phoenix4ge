@@ -207,8 +207,18 @@ async function loadColorPalette(paletteId, themeId, modelId = 39, requestCache =
 
             // Log palette loading success with safe property access
             const paletteInfo = response.data?.palette?.id || response.data?.data?.palette?.id || paletteId || 'direct';
+            const paletteSource = paletteId ? 'custom palette' : 'theme default';
             console.log(`🎨 Loaded color palette via API for model ${modelId}, palette ${paletteInfo}`);
             console.log('🎨 Compatible colors:', compatibleColors);
+            console.log(`🎨 DEBUG: Final colors being applied from ${paletteSource}:`, {
+                primary: compatibleColors.primary,
+                secondary: compatibleColors.secondary,
+                accent: compatibleColors.accent,
+                background: compatibleColors.background,
+                text: std.text,
+                paletteId: paletteId,
+                paletteSource: paletteSource
+            });
 
             // Return full color object with both token-based and compatible colors
             return { ...normalized, ...std, ...compatibleColors };
@@ -650,6 +660,8 @@ router.get('/:slug/:page?', async (req, res) => {
         const paletteId = model.active_color_palette_id;
         const themeId = model.theme_set_id;
         console.log(`🎨 Using palette ${paletteId}, theme ${themeId}${isPreview ? ' [PREVIEW]' : ''}`);
+        console.log(`🎨 DEBUG: active_color_palette_id = ${paletteId === null ? 'NULL (using theme default)' : paletteId + ' (custom palette)'}`);
+        console.log(`🎨 DEBUG: About to load colors for model ${model.id}, palette: ${paletteId}, theme: ${themeId}`);
 
         // Build preview query string for navigation links
         let previewQueryString = '';
@@ -1020,6 +1032,7 @@ router.get('/:slug/:page?', async (req, res) => {
             
             // Theme IDs for template
             themeId: model.theme_set_id,
+            activePaletteId: model.active_color_palette_id, // Model's current custom palette (NULL = use theme default)
             previewThemeId: isPreview ? previewThemeId : null,
             previewPaletteId: isPreview && req.query.preview_palette ? parseInt(req.query.preview_palette) : null,
             previewParam: previewQueryString,

@@ -148,10 +148,10 @@
         box-shadow: var(--glamour-glow);
     }
     
-    /* Hero section outline buttons (white on gradient background) */
+    /* Hero section outline buttons (light on gradient background) */
     .glamour-btn-hero-outline {
         background: transparent;
-        color: white;
+        color: var(--theme-bg);
         padding: 0.875rem 2rem;
         border-radius: 50px;
         font-weight: 500;
@@ -160,17 +160,17 @@
         align-items: center;
         gap: 0.5rem;
         transition: var(--glamour-transition);
-        border: 2px solid white;
+        border: 2px solid var(--theme-bg);
         cursor: pointer;
         font-size: 1.125rem;
     }
-    
+
     .glamour-btn-hero-outline:hover {
-        background: white;
+        background: var(--theme-bg);
         color: var(--theme-primary);
         text-decoration: none;
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.3);
+        box-shadow: 0 10px 25px -5px color-mix(in srgb, var(--theme-bg) 30%, transparent 70%);
     }
     
     /* Parallax and Animation Styles */

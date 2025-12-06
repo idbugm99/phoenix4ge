@@ -25,79 +25,122 @@
     
     <!-- Basic Theme Styles -->
     <style>
-        /* Basic Theme Colors */
+        /* =================================================================
+           Standard 15-Color Palette - Direct 1:1 Database Mapping
+           Database token_name → CSS variable (no renaming/aliasing)
+           ================================================================= */
         :root {
-            --basic-primary: {{theme.colors.primary}};
-            --basic-secondary: {{theme.colors.secondary}};
-            --basic-accent: {{theme.colors.accent}};
-            --basic-text: {{theme.colors.text}};
-            --basic-background: {{theme.colors.background}};
-            
-            /* Dynamic color system from database */
+            /* Brand Colors (3) */
             --primary: {{theme.colors.primary}};
-            --primary-700: {{theme.colors.btn-bg-hover}};
-            
-            /* Universal Theme Variables - Dynamic from Database */
-            --theme-bg-primary: {{theme.colors.background}};        /* Primary background */
-            --theme-bg-secondary: {{theme.colors.surface}};         /* Secondary background */
-            --theme-bg-tertiary: {{theme.colors.card-bg}};          /* Card backgrounds */
-            --theme-bg-light: {{theme.colors.bg-light}};            /* Lighter elements */
-            --theme-bg-surface: {{theme.colors.surface}};           /* Surface elements */
-            
-            --theme-text-primary: {{theme.colors.text-dark}};       /* Primary text */
-            --theme-text-secondary: {{theme.colors.text}};          /* Secondary text */
-            --theme-text-muted: {{theme.colors.text-light}};        /* Muted text */
-            --theme-text-subtle: {{theme.colors.disabled-text}};    /* Subtle text */
-            --theme-text-inverted: {{theme.colors.text-light}};     /* Inverted text */
-            
-            --theme-border-primary: {{theme.colors.border-light}};  /* Primary borders */
-            --theme-border-light: {{theme.colors.divider}};         /* Light borders */
-            --theme-border-subtle: {{theme.colors.card-border}};    /* Subtle borders */
-            
-            --theme-accent: {{theme.colors.accent}};                /* Accent color */
-            --theme-accent-hover: {{theme.colors.btn-bg-hover}};    /* Accent hover */
-            --theme-accent-light: {{theme.colors.link-hover}};      /* Light accent */
-            --theme-success: {{theme.colors.success}};              /* Success green */
-            --theme-warning: {{theme.colors.warning}};              /* Warning amber */
-            --theme-error: {{theme.colors.danger}};                 /* Error red */
+            --secondary: {{theme.colors.secondary}};
+            --accent: {{theme.colors.accent}};
+
+            /* Background Colors (3) */
+            --background: {{theme.colors.background}};
+            --surface: {{theme.colors.surface}};
+            --surface-alt: {{theme.colors.surface-alt}};
+
+            /* Text Colors (4) */
+            --text: {{theme.colors.text}};
+            --text-subtle: {{theme.colors.text-subtle}};
+            --text-light: {{theme.colors.text-light}};
+            --text-inverse: {{theme.colors.text-inverse}};
+
+            /* Border Colors (2) */
+            --border: {{theme.colors.border}};
+            --border-light: {{theme.colors.border-light}};
+
+            /* Semantic Colors (3) */
+            --success: {{theme.colors.success}};
+            --danger: {{theme.colors.danger}};
+            --info: {{theme.colors.info}};
+
+            /* =================================================================
+               Calculated Variations using color-mix()
+               Template decides the percentage, always from known DB colors
+               ================================================================= */
+
+            /* Primary variants for hover states */
+            --primary-hover: color-mix(in srgb, var(--primary) 80%, black 20%);
+            --primary-light: color-mix(in srgb, var(--primary) 50%, white 50%);
+
+            /* Background variants */
+            --background-hover: color-mix(in srgb, var(--surface-alt) 50%, var(--background) 50%);
+
+            /* Text variants for different contexts */
+            --text-on-primary: var(--text-inverse);
+
+            /* Border variants */
+            --border-focus: var(--accent);
+
+            /* Overlay for modals/dropdowns */
+            --overlay: color-mix(in srgb, var(--primary) 10%, transparent 90%);
         }
         
-        .text-basic-primary { color: var(--basic-primary); }
-        .bg-basic-primary { background-color: var(--basic-primary); }
-        .border-basic-primary { border-color: var(--basic-primary); }
-        
-        .text-primary { color: var(--primary); }
-        .bg-primary { background-color: var(--primary); }
-        .border-primary { border-color: var(--primary); }
-        
-        .bg-primary-700 { background-color: var(--primary-700); }
-        .hover\:bg-primary-700:hover { background-color: var(--primary-700); }
-        
-        .text-basic-secondary { color: var(--basic-secondary); }
-        .bg-basic-secondary { background-color: var(--basic-secondary); }
-        .border-basic-secondary { border-color: var(--basic-secondary); }
-        
-        .text-basic-accent { color: var(--basic-accent); }
-        .bg-basic-accent { background-color: var(--basic-accent); }
-        .border-basic-accent { border-color: var(--basic-accent); }
-        
-        /* Basic Theme Typography */
+        /* =================================================================
+           Utility Classes - Using Standardized Variables
+           ================================================================= */
+
+        /* Brand Color Classes */
+        .text-brand { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; color: var(--text-inverse) !important; }
+        .border-primary { border-color: var(--primary) !important; }
+        .hover\:bg-primary:hover { background-color: var(--primary-hover) !important; }
+
+        /* Secondary Color Classes */
+        .bg-secondary { background-color: var(--secondary) !important; color: var(--text-inverse) !important; }
+        .border-secondary { border-color: var(--secondary) !important; }
+        .hover\:bg-secondary:hover { background-color: color-mix(in srgb, var(--secondary) 80%, black 20%) !important; }
+
+        /* Accent Color Classes */
+        .text-accent { color: var(--accent) !important; }
+        .bg-accent { background-color: var(--accent) !important; color: var(--text-inverse) !important; }
+        .border-accent { border-color: var(--accent) !important; }
+
+        /* Background Classes */
+        .bg-background { background-color: var(--background) !important; }
+        .bg-surface { background-color: var(--surface) !important; }
+        .bg-surface-alt { background-color: var(--surface-alt) !important; }
+
+        /* Text Classes - Direct 1:1 mapping to database tokens */
+        .text-base { color: var(--text) !important; }
+        .text-subtle { color: var(--text-subtle) !important; }
+        .text-light { color: var(--text-light) !important; }
+        .text-inverse { color: var(--text-inverse) !important; }
+
+        /* Border Classes */
+        .border { border-color: var(--border) !important; }
+        .border-light { border-color: var(--border-light) !important; }
+
+        /* Semantic Classes */
+        .text-success { color: var(--success) !important; }
+        .bg-success { background-color: var(--success) !important; color: var(--text-inverse) !important; }
+        .text-danger { color: var(--danger) !important; }
+        .bg-danger { background-color: var(--danger) !important; color: var(--text-inverse) !important; }
+        .text-info { color: var(--info) !important; }
+        .bg-info { background-color: var(--info) !important; color: var(--text-inverse) !important; }
+
+        /* =================================================================
+           Basic Theme Components
+           ================================================================= */
+
+        /* Typography */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--basic-background);
-            color: var(--basic-text);
+            background-color: var(--background);
+            color: var(--text);
         }
-        
+
         .basic-heading {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-weight: 700;
-            color: var(--basic-text);
+            color: var(--text);
         }
-        
+
         /* Basic Button Styles */
         .basic-btn {
-            background-color: var(--basic-primary);
-            color: white;
+            background-color: var(--primary);
+            color: var(--text-inverse);
             padding: 12px 24px;
             border-radius: 6px;
             font-weight: 600;
@@ -107,58 +150,59 @@
             border: none;
             cursor: pointer;
         }
-        
+
         .basic-btn:hover {
-            background-color: var(--basic-secondary);
+            background-color: var(--primary-hover);
             transform: translateY(-1px);
-            color: white;
+            color: var(--text-inverse);
             text-decoration: none;
         }
-        
+
         .basic-btn-outline {
             background-color: transparent;
-            color: var(--basic-primary);
-            border: 2px solid var(--basic-primary);
+            color: var(--primary);
+            border: 2px solid var(--primary);
             padding: 10px 22px;
         }
-        
+
         .basic-btn-outline:hover {
-            background-color: var(--basic-primary);
-            color: white;
+            background-color: var(--primary);
+            color: var(--text-inverse);
         }
-        
+
         /* Basic Cards */
         .basic-card {
-            background: white;
-            border: 1px solid {{theme.colors.border-light}};
+            background: var(--surface);
+            border: 1px solid var(--border-light);
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-        
+
         .basic-card:hover {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             transform: translateY(-2px);
         }
-        
+
         /* Basic Navigation */
         .basic-nav {
-            background-color: var(--basic-primary);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: var(--primary) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            opacity: 1 !important;
         }
-        
+
         .basic-nav-link {
-            color: white;
+            color: var(--text-inverse);
             text-decoration: none;
             padding: 12px 16px;
             display: block;
             transition: background-color 0.3s ease;
         }
-        
+
         .basic-nav-link:hover,
         .basic-nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
+            background-color: var(--primary-hover);
+            color: var(--text-inverse);
             text-decoration: none;
         }
         
@@ -176,68 +220,86 @@
             padding-top: 64px; /* Height of navigation (h-16 = 64px) */
         }
         
-        /* Universal Theme Utility Classes */
-        /* Background Classes */
-        .theme-bg-primary { background-color: var(--theme-bg-primary) !important; }
-        .theme-bg-secondary { background-color: var(--theme-bg-secondary) !important; }
-        .theme-bg-tertiary { background-color: var(--theme-bg-tertiary) !important; }
-        .theme-bg-light { background-color: var(--theme-bg-light) !important; }
-        
-        /* Text Color Classes */
-        .theme-text-primary { color: var(--theme-text-primary) !important; }
-        .theme-text-secondary { color: var(--theme-text-secondary) !important; }
-        .theme-text-muted { color: var(--theme-text-muted) !important; }
-        .theme-text-subtle { color: var(--theme-text-subtle) !important; }
-        
-        /* Border Classes */
-        .theme-border-primary { border-color: var(--theme-border-primary) !important; }
-        .theme-border-light { border-color: var(--theme-border-light) !important; }
-        
-        /* Accent Classes */
-        .theme-accent { color: var(--theme-accent) !important; }
-        .theme-accent-bg { background-color: var(--theme-accent) !important; }
-        .theme-accent-border { border-color: var(--theme-accent) !important; }
-        
-        /* Semantic Component Classes */
+        /* =================================================================
+           Tailwind CSS Override Classes
+           Maps Tailwind color names to theme variables
+           ================================================================= */
+
+        /* White/Black Overrides */
+        .bg-white { background-color: var(--surface) !important; }
+        .text-white { color: var(--text-inverse) !important; }
+
+        /* Gray Overrides - map to text colors */
+        .text-gray-300 { color: var(--text-light) !important; }
+        .text-gray-400 { color: var(--text-light) !important; }
+        .text-gray-600 { color: var(--text-subtle) !important; }
+        .text-gray-700 { color: var(--text) !important; }
+        .text-gray-800 { color: var(--text) !important; }
+        .text-gray-900 { color: var(--text) !important; }
+
+        .bg-gray-50 { background-color: var(--surface-alt) !important; }
+        .bg-gray-100 { background-color: var(--surface-alt) !important; }
+        .bg-gray-800 { background-color: var(--surface) !important; }
+        .bg-gray-900 { background-color: var(--background) !important; }
+
+        .border-gray-200 { border-color: var(--border-light) !important; }
+        .border-gray-300 { border-color: var(--border) !important; }
+        .border-gray-700 { border-color: var(--border) !important; }
+
+        /* Blue Overrides - map to primary */
+        .text-blue-500 { color: var(--primary) !important; }
+        .text-blue-600 { color: var(--primary) !important; }
+        .bg-blue-500 { background-color: var(--primary) !important; color: var(--text-inverse) !important; }
+        .bg-blue-600 { background-color: var(--primary) !important; color: var(--text-inverse) !important; }
+        .bg-blue-700 { background-color: var(--primary-hover) !important; color: var(--text-inverse) !important; }
+        .hover\:bg-blue-600:hover { background-color: var(--primary-hover) !important; }
+        .hover\:bg-blue-700:hover { background-color: var(--primary-hover) !important; }
+        .border-blue-600 { border-color: var(--primary) !important; }
+        .border-2.border-blue-600 { border-color: var(--primary) !important; }
+
+        /* Green Overrides - map to success */
+        .text-green-600 { color: var(--success) !important; }
+        .bg-green-600 { background-color: var(--success) !important; color: var(--text-inverse) !important; }
+
+        /* Purple Overrides - map to accent */
+        .text-purple-600 { color: var(--accent) !important; }
+        .bg-purple-600 { background-color: var(--accent) !important; color: var(--text-inverse) !important; }
+
+        /* Red Overrides - map to danger */
+        .text-red-600 { color: var(--danger) !important; }
+        .bg-red-600 { background-color: var(--danger) !important; color: var(--text-inverse) !important; }
+
+        /* =================================================================
+           Legacy Class Support (for backward compatibility)
+           Will be deprecated - use standard classes above
+           ================================================================= */
+
+        .theme-accent { color: var(--accent) !important; }
+        .theme-accent-bg { background-color: var(--accent) !important; }
+        .theme-accent-border { border-color: var(--accent) !important; }
+
         .theme-card {
-            background-color: var(--theme-bg-tertiary);
-            color: var(--theme-text-primary);
-            border: 1px solid var(--theme-border-light);
+            background-color: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border-light);
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
-        
+
         .theme-card:hover {
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             transform: translateY(-2px);
         }
-        
+
         .theme-section {
-            background-color: var(--theme-bg-primary);
-            color: var(--theme-text-primary);
+            background-color: var(--background);
+            color: var(--text);
         }
-        
+
         .theme-section-alt {
-            background-color: var(--theme-bg-secondary);
-            color: var(--theme-text-primary);
-        }
-        
-        .theme-header {
-            color: var(--theme-text-primary);
-            font-weight: bold;
-        }
-        
-        .theme-body-text {
-            color: var(--theme-text-secondary);
-        }
-        
-        .theme-muted-text {
-            color: var(--theme-text-muted);
-        }
-        
-        .theme-subtle-text {
-            color: var(--theme-text-subtle);
+            background-color: var(--surface);
+            color: var(--text);
         }
     </style>
     

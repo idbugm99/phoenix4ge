@@ -75,9 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
     left: 0;
     right: 0;
     z-index: 50;
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--theme-surface) 95%, transparent 5%);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--theme-border-muted);
 }
 
 .rose-nav-container {
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 .rose-logo {
     font-size: 1.25rem;
     font-weight: bold;
-    color: #e91e63;
+    color: var(--theme-primary);
     text-decoration: none;
 }
 
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .desktop-nav .nav-link {
-    color: #333;
+    color: var(--theme-text);
     text-decoration: none;
     padding: 0.5rem 1rem;
     transition: all 0.3s;
@@ -110,35 +110,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .desktop-nav .nav-link:hover,
 .desktop-nav .nav-link.active {
-    color: #e91e63;
+    color: var(--theme-primary);
 }
 
 .mobile-menu-btn button {
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: #e91e63;
+    color: var(--theme-primary);
     cursor: pointer;
     padding: 0.5rem;
 }
 
 #mobile-menu {
-    background: white;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--theme-surface);
+    border-top: 1px solid var(--theme-border);
     padding: 1rem;
 }
 
 #mobile-menu .nav-link {
     display: block;
     padding: 0.75rem 1.5rem;
-    color: #333;
+    color: var(--theme-text);
     text-decoration: none;
     transition: all 0.3s;
 }
 
 #mobile-menu .nav-link:hover,
 #mobile-menu .nav-link.active {
-    background: rgba(233, 30, 99, 0.1);
-    color: #e91e63;
+    background: var(--theme-overlay);
+    color: var(--theme-primary);
 }
 </style>

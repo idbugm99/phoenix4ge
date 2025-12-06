@@ -3,6 +3,12 @@ const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 const { query } = require('../../config/database');
 const { generateToken, authenticateToken } = require('../../middleware/auth');
+const emailVerificationService = require('../services/EmailVerificationService');
+const refreshTokenService = require('../services/RefreshTokenService');
+const loginAttemptService = require('../services/LoginAttemptService');
+const authAuditService = require('../services/AuthAuditService');
+const mfaService = require('../services/MFAService');
+const { checkBruteForce } = require('../../middleware/bruteForceProtection');
 
 const router = express.Router();
 
@@ -90,12 +96,23 @@ router.post('/register', [
 
         const token = generateToken(newUser);
 
+        // Send email verification
+        try {
+            await emailVerificationService.sendVerificationEmail(userId, email);
+            console.log(`✅ Verification email sent to ${email}`);
+        } catch (emailError) {
+            console.error('Failed to send verification email:', emailError);
+            // Don't fail registration if email sending fails
+        }
+
         res.status(201).json({
             message: 'Account created successfully',
+            note: 'Please check your email to verify your account',
             user: {
                 id: userId,
                 email: email,
                 role: 'model',
+                emailVerified: false,
                 model: {
                     id: modelId,
                     name: modelName,
@@ -115,6 +132,7 @@ router.post('/register', [
 
 // Login user
 router.post('/login', [
+    checkBruteForce, // Check account lockout before processing
     body('email')
         .isEmail()
         .normalizeEmail()
@@ -134,6 +152,8 @@ router.post('/login', [
         }
 
         const { email, password } = req.body;
+        const ipAddress = req.ip;
+        const userAgent = req.get('user-agent');
 
         // Get user from database
         const users = await query(
@@ -142,6 +162,23 @@ router.post('/login', [
         );
 
         if (users.length === 0) {
+            // Record failed attempt - user not found
+            await loginAttemptService.recordAttempt(
+                email, null, false, ipAddress, userAgent, 'user_not_found'
+            );
+
+            // Log audit event
+            await authAuditService.logEvent({
+                eventType: 'login_failed',
+                eventCategory: 'authentication',
+                userId: null,
+                email: email,
+                success: false,
+                failureReason: 'user_not_found',
+                ipAddress: ipAddress,
+                userAgent: userAgent
+            });
+
             return res.fail(401, 'Invalid credentials', {
                 message: 'Email or password is incorrect'
             });
@@ -150,6 +187,23 @@ router.post('/login', [
         const user = users[0];
 
         if (!user.is_active) {
+            // Record failed attempt - account disabled
+            await loginAttemptService.recordAttempt(
+                email, user.id, false, ipAddress, userAgent, 'account_disabled'
+            );
+
+            // Log audit event
+            await authAuditService.logEvent({
+                eventType: 'login_failed',
+                eventCategory: 'authentication',
+                userId: user.id,
+                email: email,
+                success: false,
+                failureReason: 'account_disabled',
+                ipAddress: ipAddress,
+                userAgent: userAgent
+            });
+
             return res.fail(401, 'Account disabled', {
                 message: 'Your account has been disabled. Please contact support.'
             });
@@ -158,6 +212,23 @@ router.post('/login', [
         // Verify password
         const isPasswordValid = await bcrypt.compare(password, user.password_hash);
         if (!isPasswordValid) {
+            // Record failed attempt - invalid password
+            await loginAttemptService.recordAttempt(
+                email, user.id, false, ipAddress, userAgent, 'invalid_password'
+            );
+
+            // Log audit event
+            await authAuditService.logEvent({
+                eventType: 'login_failed',
+                eventCategory: 'authentication',
+                userId: user.id,
+                email: email,
+                success: false,
+                failureReason: 'invalid_password',
+                ipAddress: ipAddress,
+                userAgent: userAgent
+            });
+
             return res.fail(401, 'Invalid credentials', {
                 message: 'Email or password is incorrect'
             });
@@ -172,7 +243,71 @@ router.post('/login', [
             ORDER BY mu.role = 'owner' DESC, m.created_at ASC
         `, [user.id]);
 
+        // Check if MFA is enabled for this user
+        const mfaEnabled = await mfaService.isMFAEnabled(user.id);
+
+        if (mfaEnabled) {
+            // Check if device is trusted
+            const deviceTrusted = await mfaService.isDeviceTrusted(user.id, ipAddress, userAgent);
+
+            if (!deviceTrusted) {
+                // Create MFA challenge session
+                const sessionToken = await mfaService.createChallengeSession(
+                    user.id,
+                    ipAddress,
+                    userAgent
+                );
+
+                // Log MFA challenge initiated
+                await authAuditService.logEvent({
+                    eventType: 'mfa_challenge_required',
+                    eventCategory: 'authentication',
+                    userId: user.id,
+                    email: email,
+                    success: true,
+                    ipAddress: ipAddress,
+                    userAgent: userAgent
+                });
+
+                return res.json({
+                    message: 'MFA verification required',
+                    mfaRequired: true,
+                    sessionToken: sessionToken,
+                    note: 'Please enter your 6-digit code from your authenticator app or a backup code'
+                });
+            }
+
+            // Device is trusted, proceed with normal login
+            console.log(`✅ Trusted device detected for user ${user.id}, skipping MFA`);
+        }
+
+        // Normal login flow (no MFA or trusted device)
         const token = generateToken(user);
+
+        // Generate refresh token for persistent sessions
+        const tokens = await refreshTokenService.createRefreshToken(user.id, ipAddress, userAgent);
+
+        // Record successful login attempt
+        await loginAttemptService.recordAttempt(
+            email, user.id, true, ipAddress, userAgent, null
+        );
+
+        // Log successful login audit event
+        await authAuditService.logEvent({
+            eventType: 'login',
+            eventCategory: 'authentication',
+            userId: user.id,
+            email: email,
+            success: true,
+            ipAddress: ipAddress,
+            userAgent: userAgent,
+            metadata: {
+                role: user.role,
+                modelCount: models.length,
+                mfaEnabled: mfaEnabled,
+                trustedDevice: mfaEnabled
+            }
+        });
 
         res.json({
             message: 'Login successful',
@@ -182,13 +317,123 @@ router.post('/login', [
                 role: user.role,
                 models: models
             },
-            token: token
+            token: token,
+            refreshToken: tokens.refreshToken,
+            expiresIn: tokens.expiresIn
         });
 
     } catch (error) {
         console.error('Login error:', error);
         res.fail(500, 'Login failed', {
             message: 'Unable to login. Please try again.'
+        });
+    }
+});
+
+// Complete login after MFA verification
+router.post('/complete-mfa-login', [
+    body('sessionToken')
+        .notEmpty()
+        .withMessage('Session token is required'),
+    body('code')
+        .notEmpty()
+        .withMessage('Verification code is required')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.fail(400, 'Validation failed', {
+                message: 'Please check your input',
+                details: errors.array()
+            });
+        }
+
+        const { sessionToken, code, trustDevice } = req.body;
+        const ipAddress = req.ip;
+        const userAgent = req.get('user-agent');
+
+        // Verify MFA challenge
+        const result = await mfaService.verifyChallengeSession(sessionToken, code, ipAddress);
+
+        if (!result.verified) {
+            return res.fail(400, 'Verification failed', {
+                message: result.error,
+                attemptsRemaining: result.attemptsRemaining
+            });
+        }
+
+        // Get user info
+        const users = await query(
+            'SELECT id, email, role FROM users WHERE id = ?',
+            [result.userId]
+        );
+
+        if (users.length === 0) {
+            return res.fail(404, 'User not found', {
+                message: 'Unable to complete login'
+            });
+        }
+
+        const user = users[0];
+
+        // Get user's models
+        const models = await query(`
+            SELECT m.id, m.name, m.slug, m.status, mu.role
+            FROM models m
+            JOIN model_users mu ON m.id = mu.model_id
+            WHERE mu.user_id = ? AND mu.is_active = true
+            ORDER BY mu.role = 'owner' DESC, m.created_at ASC
+        `, [user.id]);
+
+        // Trust device if requested
+        if (trustDevice) {
+            await mfaService.trustDevice(user.id, ipAddress, userAgent);
+        }
+
+        // Generate tokens
+        const token = generateToken(user);
+        const tokens = await refreshTokenService.createRefreshToken(user.id, ipAddress, userAgent);
+
+        // Record successful login
+        await loginAttemptService.recordAttempt(
+            user.email, user.id, true, ipAddress, userAgent, null
+        );
+
+        // Log successful MFA-verified login
+        await authAuditService.logEvent({
+            eventType: 'login',
+            eventCategory: 'authentication',
+            userId: user.id,
+            email: user.email,
+            success: true,
+            ipAddress: ipAddress,
+            userAgent: userAgent,
+            metadata: {
+                role: user.role,
+                modelCount: models.length,
+                mfaVerified: true,
+                trustedDevice: !!trustDevice
+            }
+        });
+
+        res.json({
+            message: 'Login successful',
+            user: {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                models: models
+            },
+            token: token,
+            refreshToken: tokens.refreshToken,
+            expiresIn: tokens.expiresIn,
+            mfaVerified: true
+        });
+
+    } catch (error) {
+        console.error('Complete MFA login error:', error);
+        res.fail(500, 'Login failed', {
+            message: 'Unable to complete login'
         });
     }
 });

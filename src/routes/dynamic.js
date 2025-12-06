@@ -21,28 +21,52 @@ async function getModelBySlug(slug) {
 
 // Helper function to get model's active theme
 async function getModelTheme(modelId) {
+    // Query theme_sets (not themes) using the new schema
     const themes = await db.query(`
-        SELECT t.name, t.display_name, t.description
-        FROM themes t
-        JOIN model_themes mt ON t.id = mt.theme_id
-        WHERE mt.model_id = ? AND mt.is_active = true AND t.is_active = true
+        SELECT ts.name, ts.display_name, ts.description, ts.default_palette_id
+        FROM theme_sets ts
+        JOIN model_theme_permissions mtp ON ts.id = mtp.theme_set_id
+        WHERE mtp.model_id = ? AND mtp.is_granted = true AND ts.is_active = true
+        ORDER BY mtp.granted_at DESC
         LIMIT 1
     `, [modelId]);
 
-    return themes.length > 0 ? themes[0].name : 'basic';
+    if (themes.length > 0) {
+        return {
+            name: themes[0].name,
+            display_name: themes[0].display_name,
+            palette_id: themes[0].default_palette_id
+        };
+    }
+
+    // Fallback to basic theme if no theme found
+    const basicTheme = await db.query(`
+        SELECT name, display_name, default_palette_id
+        FROM theme_sets
+        WHERE name = 'basic'
+        LIMIT 1
+    `);
+
+    return basicTheme.length > 0 ? {
+        name: basicTheme[0].name,
+        display_name: basicTheme[0].display_name,
+        palette_id: basicTheme[0].default_palette_id
+    } : { name: 'basic', display_name: 'Basic', palette_id: 7 };
 }
 
-// Helper function to get theme colors
-async function getThemeColors(themeName) {
+// Helper function to get theme colors using standardized 15-token palette
+async function getThemeColors(paletteId) {
+    // Query color_palette_values using token_name (not color_type)
     const colors = await db.query(`
-        SELECT tc.color_type, tc.color_value
-        FROM theme_colors tc
-        JOIN themes t ON tc.theme_id = t.id
-        WHERE t.name = ?
-    `, [themeName]);
+        SELECT token_name, token_value
+        FROM color_palette_values
+        WHERE palette_id = ?
+        ORDER BY token_name
+    `, [paletteId]);
 
+    // Convert to object with token_name as key
     return colors.reduce((acc, color) => {
-        acc[color.color_type] = color.color_value;
+        acc[color.token_name] = color.token_value;
         return acc;
     }, {});
 }
@@ -61,8 +85,8 @@ async function getMenuItems(modelId) {
 
 // Helper function to build template context
 async function buildTemplateContext(model, user = null) {
-    const theme = await getModelTheme(model.id);
-    const colors = await getThemeColors(theme);
+    const themeInfo = await getModelTheme(model.id);
+    const colors = await getThemeColors(themeInfo.palette_id);
     const menuItems = await getMenuItems(model.id);
 
     return {
@@ -79,7 +103,9 @@ async function buildTemplateContext(model, user = null) {
             watermark_image: model.watermark_image
         },
         theme: {
-            name: theme,
+            name: themeInfo.name,
+            display_name: themeInfo.display_name,
+            palette_id: themeInfo.palette_id,
             colors: colors
         },
         menu_items: menuItems,

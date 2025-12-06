@@ -1,0 +1,80 @@
+# Node modules (will be installed in container)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files (use docker-compose environment variables instead)
+.env
+.env.local
+.env.*.local
+.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+*.md
+!README.md
+docs/
+CLAUDE.md
+THEME-STANDARDIZATION-SUMMARY.md
+
+# Test files
+tests/
+test/
+*.test.js
+*.spec.js
+coverage/
+.nyc_output/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Docker files (don't copy docker files into the image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Logs
+logs
+*.log
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Uploads (should be volume-mounted)
+uploads/
+public/uploads/
+
+# Database files
+*.sql
+*.sqlite
+*.db
+
+# Backup files
+*_backup/
+*.bak
+
+# Development artifacts
+.cache/
+.parcel-cache/
+dist/
+build/
+
+# OS files
+Thumbs.db

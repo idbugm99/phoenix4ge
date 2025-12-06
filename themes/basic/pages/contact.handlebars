@@ -1,15 +1,15 @@
 <!-- Contact Page - RoseMastos Style Structure -->
-<section class="py-16 bg-gray-50 text-gray-800">
+<section class="py-16 theme-bg-light text-base">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Page Header -->
         {{#if contact_content.contact_header_visible}}
         <div class="text-center mb-12" data-aos="fade-up">
-            <h1 class="text-4xl font-bold mb-6 text-basic-primary">
+            <h1 class="text-4xl font-bold mb-6 text-base">
                 {{#if contact_content.page_title}}{{contact_content.page_title}}{{else}}Contact Me{{/if}}
             </h1>
             {{#if contact_content.page_subtitle}}
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-xl text-subtle max-w-3xl mx-auto">
                 {{contact_content.page_subtitle}}
             </p>
             {{/if}}
@@ -19,8 +19,8 @@
         <div class="grid md:grid-cols-2 gap-12">
             <!-- Contact Form -->
             {{#if contact_content.contact_form_visible}}
-            <div class="bg-white p-8 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="100">
-                <h2 class="text-2xl font-bold mb-6 text-basic-primary">
+            <div class="bg-surface border border-light p-8 rounded-2xl" style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);" data-aos="fade-up" data-aos-delay="100">
+                <h2 class="text-2xl font-bold mb-6 text-base">
                     {{#if contact_content.form_title}}{{contact_content.form_title}}{{else}}Send a Message{{/if}}
                 </h2>
                 
@@ -47,7 +47,7 @@
                     </div>
                     
                     <div>
-                        <label for="phone" class="block font-medium mb-2" style="font-size: 12px; line-height: 16px; color: #64748B;">
+                        <label for="phone" class="block font-medium mb-2 text-subtle" style="font-size: 12px; line-height: 16px;">
                             {{#if contact_content.form_phone_label}}{{contact_content.form_phone_label}}{{else}}Phone Number (Optional){{/if}}
                         </label>
                         <input type="tel" id="phone" name="phone" 
@@ -56,7 +56,7 @@
                     </div>
                     
                     <div>
-                        <label for="date" class="block font-medium mb-2" style="font-size: 12px; line-height: 16px; color: #64748B;">
+                        <label for="date" class="block font-medium mb-2 text-subtle" style="font-size: 12px; line-height: 16px;">
                             {{#if contact_content.form_date_label}}{{contact_content.form_date_label}}{{else}}Preferred Date{{/if}}
                         </label>
                         <input type="date" id="date" name="date" 
@@ -65,7 +65,7 @@
                     </div>
                     
                     <div>
-                        <label for="duration" class="block font-medium mb-2" style="font-size: 12px; line-height: 16px; color: #64748B;">
+                        <label for="duration" class="block font-medium mb-2 text-subtle" style="font-size: 12px; line-height: 16px;">
                             {{#if contact_content.form_duration_label}}{{contact_content.form_duration_label}}{{else}}Duration{{/if}}
                         </label>
                         <select id="duration" name="duration" 
@@ -79,17 +79,17 @@
                     </div>
                     
                     <div>
-                        <label for="message" class="block font-medium mb-2" style="font-size: 12px; line-height: 16px; color: #64748B;">
-                            {{#if contact_content.form_message_label}}{{contact_content.form_message_label}}{{else}}Message{{/if}}<span style="color: #EF4444;">*</span>
+                        <label for="message" class="block font-medium mb-2 text-subtle" style="font-size: 12px; line-height: 16px;">
+                            {{#if contact_content.form_message_label}}{{contact_content.form_message_label}}{{else}}Message{{/if}}<span style="color: var(--theme-error);">*</span>
                         </label>
                         <textarea id="message" name="message" rows="5" required 
-                                  class="w-full px-4 py-3 border contact-input" style="border-radius: 12px; border-color: #E5E7EB;"
+                                  class="w-full px-4 py-3 border contact-input theme-border-light" style="border-radius: 12px;"
                                   placeholder="{{#if contact_content.form_message_placeholder}}{{contact_content.form_message_placeholder}}{{else}}Please include any specific requests or questions...{{/if}}"></textarea>
                         <div class="error-message hidden" style="font-size: 12px; line-height: 16px; color: {{theme.colors.danger}}; margin-top: 4px;"></div>
                     </div>
                     
                     <button type="submit" id="submitBtn"
-                            class="w-full md:w-auto bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            class="w-full md:w-auto bg-primary text-inverse py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         <span class="button-text">{{#if contact_content.form_button_text}}{{contact_content.form_button_text}}{{else}}Send Message{{/if}}</span>
                         <span class="spinner hidden">Sending...</span>
                     </button>
@@ -101,47 +101,47 @@
             <div class="space-y-8">
                 <!-- Direct Contact -->
                 {{#if contact_content.contact_direct_visible}}
-                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200" data-aos="fade-up" data-aos-delay="200">
-                    <h2 class="text-2xl font-bold mb-6 text-blue-600">
+                <div class="bg-surface border border-light p-8 rounded-2xl" style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);" data-aos="fade-up" data-aos-delay="200">
+                    <h2 class="text-2xl font-bold mb-6 text-base">
                         {{#if contact_content.direct_title}}{{contact_content.direct_title}}{{else}}Direct Contact{{/if}}
                     </h2>
                     <div class="space-y-4">
                         <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 mr-3 text-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                             <div>
-                                <p class="font-medium text-gray-900">
+                                <p class="font-medium text-base">
                                     {{#if contact_content.direct_email_label}}{{contact_content.direct_email_label}}{{else}}Email{{/if}}
                                 </p>
-                                <p class="text-gray-600">
-                                    <a href="mailto:{{contactEmail}}" class="text-blue-600 hover:underline">{{contactEmail}}</a>
+                                <p class="text-subtle">
+                                    <a href="mailto:{{contactEmail}}" class="text-base hover:underline">{{contactEmail}}</a>
                                 </p>
                             </div>
                         </div>
                         
                         {{#if contactPhone}}
                         <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 mr-3 text-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                             </svg>
                             <div>
-                                <p class="font-medium text-gray-900">
+                                <p class="font-medium text-base">
                                     {{#if contact_content.direct_phone_label}}{{contact_content.direct_phone_label}}{{else}}Phone{{/if}}
                                 </p>
-                                <p class="text-gray-600">
-                                    <a href="tel:{{contactPhone}}" class="text-blue-600 hover:underline">{{contactPhone}}</a>
+                                <p class="text-subtle">
+                                    <a href="tel:{{contactPhone}}" class="text-base hover:underline">{{contactPhone}}</a>
                                 </p>
                             </div>
                         </div>
                         {{/if}}
                         
                         <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 mr-3 text-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             <div>
-                                <p class="font-medium text-gray-900" style="font-size: 12px; line-height: 18px;">
+                                <p class="font-medium text-base" style="font-size: 12px; line-height: 18px;">
                                     {{#if contact_content.direct_response_text}}{{contact_content.direct_response_text}}{{else}}I typically respond within 2-4 hours{{/if}}
                                 </p>
                             </div>
@@ -152,32 +152,32 @@
                 
                 <!-- Booking Guidelines -->
                 {{#if contact_content.contact_guidelines_visible}}
-                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200" data-aos="fade-up" data-aos-delay="300">
-                    <h3 class="text-xl font-bold mb-4 text-blue-600">
+                <div class="bg-surface border border-light p-8 rounded-2xl" style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-xl font-bold mb-4 text-base">
                         {{#if contact_content.guidelines_title}}{{contact_content.guidelines_title}}{{else}}Booking Guidelines{{/if}}
                     </h3>
-                    <div class="space-y-2 text-gray-700">
+                    <div class="space-y-2 text-subtle">
                         {{#if contact_content.guideline_1}}
                         <div class="flex items-start">
-                            <span class="text-blue-600 mr-2 mt-1">•</span>
+                            <span class="text-base mr-2 mt-1">•</span>
                             <span>{{contact_content.guideline_1}}</span>
                         </div>
                         {{/if}}
                         {{#if contact_content.guideline_2}}
                         <div class="flex items-start">
-                            <span class="text-blue-600 mr-2 mt-1">•</span>
+                            <span class="text-base mr-2 mt-1">•</span>
                             <span>{{contact_content.guideline_2}}</span>
                         </div>
                         {{/if}}
                         {{#if contact_content.guideline_3}}
                         <div class="flex items-start">
-                            <span class="text-blue-600 mr-2 mt-1">•</span>
+                            <span class="text-base mr-2 mt-1">•</span>
                             <span>{{contact_content.guideline_3}}</span>
                         </div>
                         {{/if}}
                         {{#if contact_content.guideline_4}}
                         <div class="flex items-start">
-                            <span class="text-blue-600 mr-2 mt-1">•</span>
+                            <span class="text-base mr-2 mt-1">•</span>
                             <span>{{contact_content.guideline_4}}</span>
                         </div>
                         {{/if}}
@@ -187,20 +187,20 @@
                 
                 <!-- Location & Services -->
                 {{#if contact_content.contact_location_visible}}
-                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200" data-aos="fade-up" data-aos-delay="400">
-                    <h3 class="text-xl font-bold mb-4 text-blue-600">
+                <div class="bg-surface border border-light p-8 rounded-2xl" style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);" data-aos="fade-up" data-aos-delay="400">
+                    <h3 class="text-xl font-bold mb-4 text-base">
                         {{#if contact_content.location_title}}{{contact_content.location_title}}{{else}}Location & Services{{/if}}
                     </h3>
-                    <div class="space-y-2 text-gray-700">
+                    <div class="space-y-2 text-subtle">
                         {{#if contact_content.location_area_text}}
                         <div class="flex items-start">
-                            <span class="text-blue-600 mr-2 mt-1">•</span>
+                            <span class="text-base mr-2 mt-1">•</span>
                             <span>{{contact_content.location_area_text}}</span>
                         </div>
                         {{/if}}
                         {{#if contact_content.location_services_text}}
                         <div class="flex items-start">
-                            <span class="text-blue-600 mr-2 mt-1">•</span>
+                            <span class="text-base mr-2 mt-1">•</span>
                             <span>{{contact_content.location_services_text}}</span>
                         </div>
                         {{/if}}
@@ -210,11 +210,11 @@
                 
                 <!-- Privacy & Discretion -->
                 {{#if contact_content.contact_privacy_visible}}
-                <div class="bg-gray-900 text-white p-6 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="500">
+                <div class="theme-bg-surface text-inverse p-6 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="500">
                     <h3 class="text-lg font-bold mb-3">
                         {{#if contact_content.privacy_title}}{{contact_content.privacy_title}}{{else}}Privacy & Discretion{{/if}}
                     </h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">
+                    <p class="text-subtle text-sm leading-relaxed">
                         {{#if contact_content.privacy_text}}{{contact_content.privacy_text}}{{else}}All communications are handled with the utmost discretion and confidentiality. Your privacy is my priority.{{/if}}
                     </p>
                 </div>
@@ -305,14 +305,14 @@ function showFieldError(fieldName, message) {
     const field = document.getElementById(fieldName);
     const errorDiv = field.parentElement.querySelector('.error-message');
     
-    field.style.borderColor = '#EF4444';
+    field.style.borderColor = 'var(--theme-error)';
     errorDiv.textContent = message;
     errorDiv.classList.remove('hidden');
 }
 
 function clearErrors() {
     document.querySelectorAll('.contact-input').forEach(input => {
-        input.style.borderColor = '#E5E7EB';
+        input.style.borderColor = 'var(--theme-border-light)';
     });
     document.querySelectorAll('.error-message').forEach(error => {
         error.classList.add('hidden');
@@ -347,12 +347,12 @@ function isValidEmail(email) {
 }
 
 .contact-input:focus {
-    border-color: #2563EB !important;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
+    border-color: var(--theme-focus) !important;
+    box-shadow: 0 0 0 3px var(--theme-overlay) !important;
 }
 
 .contact-input.error {
-    border-color: #EF4444 !important;
+    border-color: var(--theme-error) !important;
 }
 
 @media (max-width: 768px) {
