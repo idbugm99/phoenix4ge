@@ -479,6 +479,7 @@ async function getModelContent(modelSlug, pageType, requestCache = null) {
 // Main route handler for model pages
 router.get('/:slug/:page?', async (req, res) => {
     try {
+        console.log("🔍 DEBUG: Route handler started for slug=" + req.params.slug + ", page=" + req.params.page);
         const { slug, page = 'home' } = req.params;
 
         // Initialize request-level cache to prevent duplicate API calls

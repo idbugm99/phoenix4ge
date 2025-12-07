@@ -244,7 +244,7 @@ p { font-size: clamp(0.875rem, 2.5vw, 1.125rem); line-height: 1.6; }
     table.mobile-cards tbody tr {
         display: block;
         margin-bottom: 1rem;
-        border: 1px solid rgba(0,0,0,0.1);
+        border: 1px solid color-mix(in srgb, var(--theme-border) 10%, transparent);
         border-radius: 8px;
         padding: 1rem;
     }

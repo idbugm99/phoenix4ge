@@ -1,0 +1,252 @@
+version: '3.8'
+
+# ============================================
+# PHOENIX4GE CORPORATE - UNIFIED DOCKER SETUP
+# ============================================
+# This docker-compose manages:
+# - Appwrite (unified authentication)
+# - Phoenix4ge (model portfolio system)
+# - Symbiosis (lab management system)
+# ============================================
+
+services:
+  # ============================================
+  # SHARED SERVICES
+  # ============================================
+
+  # Appwrite handles authentication for both systems
+  # Access at: http://localhost (API) and http://localhost/console (Admin UI)
+  # Note: Appwrite brings its own MariaDB, Redis, and other services
+  # See ./appwrite/docker-compose.yml for full Appwrite stack
+
+  # ============================================
+  # PHOENIX4GE SERVICES (Model Portfolio System)
+  # ============================================
+
+  phoenix4ge-mysql:
+    image: mysql:8.0
+    container_name: phoenix4ge-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PHOENIX_DB_ROOT_PASSWORD:-secure_root_password}
+      MYSQL_DATABASE: ${PHOENIX_DB_NAME:-musenest}
+      MYSQL_USER: ${PHOENIX_DB_USER:-phoenix_user}
+      MYSQL_PASSWORD: ${PHOENIX_DB_PASSWORD:-secure_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - phoenix4ge-mysql-data:/var/lib/mysql
+    networks:
+      - phoenix4ge-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phoenix4ge-redis:
+    image: redis:7-alpine
+    container_name: phoenix4ge-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - phoenix4ge-redis-data:/data
+    networks:
+      - phoenix4ge-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phoenix4ge-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: phoenix4ge-app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3000
+      # Database configuration
+      DB_HOST: phoenix4ge-mysql
+      DB_PORT: 3306
+      DB_NAME: ${PHOENIX_DB_NAME:-musenest}
+      DB_DATABASE: ${PHOENIX_DB_NAME:-musenest}
+      DB_USER: ${PHOENIX_DB_USER:-phoenix_user}
+      DB_PASSWORD: ${PHOENIX_DB_PASSWORD:-secure_password}
+
+      # Redis configuration
+      REDIS_HOST: phoenix4ge-redis
+      REDIS_PORT: 6379
+      # Appwrite configuration
+      APPWRITE_ENDPOINT: ${APPWRITE_ENDPOINT:-http://host.docker.internal/v1}
+      APPWRITE_PROJECT_ID: ${PHOENIX_APPWRITE_PROJECT_ID}
+      APPWRITE_API_KEY: ${PHOENIX_APPWRITE_API_KEY}
+      # Session configuration
+      SESSION_SECRET: ${SESSION_SECRET:-change-this-in-production}
+      JWT_SECRET: ${JWT_SECRET:-change-this-in-production}
+    ports:
+      - "80:3000"
+    volumes:
+      # Mount uploads directory for persistent storage
+      - ./uploads:/app/uploads
+      - ./public/uploads:/app/public/uploads
+      - ./logs:/app/logs
+    networks:
+      - phoenix4ge-network
+    depends_on:
+      phoenix4ge-mysql:
+        condition: service_healthy
+      phoenix4ge-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  phoenix4ge-app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: phoenix4ge-app-dev
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      # Database configuration
+      DB_HOST: phoenix4ge-mysql
+      DB_PORT: 3306
+      DB_NAME: ${PHOENIX_DB_NAME:-musenest}
+      DB_DATABASE: ${PHOENIX_DB_NAME:-musenest}
+      DB_USER: ${PHOENIX_DB_USER:-phoenix_user}
+      DB_PASSWORD: ${PHOENIX_DB_PASSWORD:-secure_password}
+      # Redis configuration
+      REDIS_HOST: phoenix4ge-redis
+      REDIS_PORT: 6379
+      # Appwrite configuration
+      APPWRITE_ENDPOINT: ${APPWRITE_ENDPOINT:-http://host.docker.internal/v1}
+      APPWRITE_PROJECT_ID: ${PHOENIX_APPWRITE_PROJECT_ID}
+      APPWRITE_API_KEY: ${PHOENIX_APPWRITE_API_KEY}
+      # Session configuration
+      SESSION_SECRET: ${SESSION_SECRET:-change-this-in-production}
+      JWT_SECRET: ${JWT_SECRET:-change-this-in-production}
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./public/uploads:/app/public/uploads
+      - ./logs:/app/logs
+    networks:
+      - phoenix4ge-network
+    depends_on:
+      phoenix4ge-mysql:
+        condition: service_healthy
+      phoenix4ge-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================
+  # SYMBIOSIS SERVICES (Lab Management System)
+  # ============================================
+
+  symbiosis-postgres:
+    image: postgres:15-alpine
+    container_name: symbiosis-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${SYMBIOSIS_DB_NAME:-symbiosis}
+      POSTGRES_USER: ${SYMBIOSIS_DB_USER:-symbiosis}
+      POSTGRES_PASSWORD: ${SYMBIOSIS_DB_PASSWORD:-secure_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - symbiosis-postgres-data:/var/lib/postgresql/data
+      - ./Symbiosis/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - symbiosis-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${SYMBIOSIS_DB_USER:-symbiosis}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # symbiosis-backend:
+  #   # Uncomment this section when ready to containerize the backend
+  #   build:
+  #     context: ./Symbiosis/backend
+  #     dockerfile: Dockerfile
+  #   container_name: symbiosis-backend
+  #   restart: unless-stopped
+  #   environment:
+  #     NODE_ENV: ${NODE_ENV:-development}
+  #     PORT: 5000
+  #     DATABASE_URL: postgresql://${SYMBIOSIS_DB_USER:-symbiosis}:${SYMBIOSIS_DB_PASSWORD:-secure_password}@symbiosis-postgres:5432/${SYMBIOSIS_DB_NAME:-symbiosis}
+  #     APPWRITE_ENDPOINT: http://host.docker.internal/v1
+  #     APPWRITE_PROJECT_ID: ${SYMBIOSIS_APPWRITE_PROJECT_ID}
+  #     APPWRITE_API_KEY: ${SYMBIOSIS_APPWRITE_API_KEY}
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./Symbiosis/backend:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - symbiosis-network
+  #   depends_on:
+  #     symbiosis-postgres:
+  #       condition: service_healthy
+
+  # symbiosis-frontend:
+  #   # Uncomment this section when ready to containerize the frontend
+  #   build:
+  #     context: ./Symbiosis/frontend
+  #     dockerfile: Dockerfile
+  #   container_name: symbiosis-frontend
+  #   restart: unless-stopped
+  #   environment:
+  #     VITE_API_URL: http://localhost:5000
+  #     VITE_APPWRITE_ENDPOINT: http://localhost/v1
+  #     VITE_APPWRITE_PROJECT_ID: ${SYMBIOSIS_APPWRITE_PROJECT_ID}
+  #   ports:
+  #     - "3002:3000"
+  #   volumes:
+  #     - ./Symbiosis/frontend:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - symbiosis-network
+  #   depends_on:
+  #     - symbiosis-backend
+
+# ============================================
+# NETWORKS
+# ============================================
+networks:
+  phoenix4ge-network:
+    driver: bridge
+    name: phoenix4ge-network
+
+  symbiosis-network:
+    driver: bridge
+    name: symbiosis-network
+
+# ============================================
+# VOLUMES (Persistent Data Storage)
+# ============================================
+volumes:
+  phoenix4ge-mysql-data:
+    name: phoenix4ge-mysql-data
+
+  phoenix4ge-redis-data:
+    name: phoenix4ge-redis-data
+
+  symbiosis-postgres-data:
+    name: symbiosis-postgres-data

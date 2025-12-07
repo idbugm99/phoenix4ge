@@ -264,9 +264,24 @@
 </head>
 
 <body style="background-color: var(--theme-bg);">
+    <!-- DEBUG BANNER -->
+    <div id="debug-banner" style="position: fixed; top: 0; left: 0; right: 0; background: #ff0000; color: #fff; padding: 10px; z-index: 99999; font-family: monospace; font-size: 12px;">
+        <strong>DEBUG:</strong>
+        Palette: {{activePaletteId}} |
+        Server Primary: {{theme.colors.primary}} |
+        Computed: <span id="debug-computed">...</span>
+        <button onclick="this.parentElement.remove()" style="float: right; background: #fff; color: #000; padding: 2px 8px;">X</button>
+    </div>
+    <script>
+    setTimeout(() => {
+        const computed = getComputedStyle(document.documentElement).getPropertyValue('--theme-primary').trim();
+        document.getElementById('debug-computed').textContent = computed;
+    }, 100);
+    </script>
+
     <!-- Navigation -->
     {{> navigation}}
-    
+
     <!-- Theme Preview Banner -->
     {{#if theme.isPreview}}
     <div class="bg-orange-500 text-white py-2 px-4 text-center text-sm font-medium">

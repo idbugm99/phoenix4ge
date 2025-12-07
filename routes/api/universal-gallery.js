@@ -12,8 +12,8 @@ const mysql = require('mysql2/promise');
 // Database connection
 async function getDbConnection() {
     return mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_DATABASE || 'phoenix4ge',
         timezone: '+00:00'
